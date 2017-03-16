@@ -36,6 +36,8 @@ routes(app);
 
 // serve video files.
 app.use('/videos',express.static('videos'));
+//serve image files.
+app.use('/images',express.static('images'));
 // serve client side code.
 app.use('/',express.static('client'));
 
