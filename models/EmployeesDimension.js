@@ -26,7 +26,7 @@ var EmployeesDim = db.define('employees_dimension', {
       key: 'id',
       deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
     }
-  }.
+  }
 });
 
 module.exports = {
