@@ -3,9 +3,12 @@ var express = require('express');
 var path = require('path');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
+var Sequelize = require('sequelize');
 //var mongoose = require('mongoose');
 //var db = mongoose.connection;
 var app = express();
+
+var onHeroku = !!process.env.DYNO;
 
 //db.on('error', console.error);
 
@@ -14,6 +17,24 @@ var configs = require('./config');
 var routes = require('./routes/routes');
 //var userModel = require('./models/users');
 var helperFunctions = require('./helpers/helperFunctions');
+
+//connect to database
+var sequelize = onHeroku ?
+  new Sequelize(process.env.DATABASE_URL, {
+    dialect: 'postgres',
+    protocol: 'postgres',
+    dialectOptions: {
+      ssl: true
+    }
+  }) :
+  new Sequelize(configs.dbName, configs.dbUser, configs.dbPass, {
+    host: configs.dbHost,
+    port: configs.dbPort,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: true
+    }
+  });
 
 
 // Uncomment the following lines to start logging requests to consoles.
