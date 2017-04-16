@@ -4,7 +4,7 @@ var Sequelize = require('sequelize');
 /*
 Sale territories Dimension Model
 */
-var ShipMethodsDimension = db.define('ship_methods_dimension', {
+var CurrencyRatesDimension = db.define('currency_rates_dimension', {
   //llave foranea a ubicacion geográfica
   currencyRateDate: Sequelize.DATE,
   fromCurrencyCode: Sequelize.STRING,
@@ -14,5 +14,5 @@ var ShipMethodsDimension = db.define('ship_methods_dimension', {
 });
 
 module.exports = {
-  ShipMethodsDimension: ShipMethodsDimension
+  CurrencyRatesDimension: CurrencyRatesDimension
 };
