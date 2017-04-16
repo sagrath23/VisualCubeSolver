@@ -1,7 +1,7 @@
 var db = require('../config/database');
 var Sequelize = require('sequelize');
 
-var CurrencyRateDimension = require('./CurrencyRateDimension').CurrencyRateDimension;
+var CurrencyRatesDimension = require('./CurrencyRatesDimension').CurrencyRatesDimension;
 
 var SaleReasonsDimension = require('./SaleReasonsDimension').SaleReasonsDimension;
 
@@ -22,7 +22,7 @@ db.sync({
 });
 
 module.exports = {
-  CurrencyRateDimension: CurrencyRateDimension,
+  CurrencyRatesDimension: CurrencyRatesDimension,
   SaleReasonsDimension: SaleReasonsDimension,
   SaleTerritoriesDimension: SaleTerritoriesDimension,
   ShipMethodsDimension: ShipMethodsDimension,

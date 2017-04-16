@@ -6,8 +6,6 @@ var bodyParser = require('body-parser');
 
 var app = express();
 
-var onHeroku = !!process.env.DYNO;
-
 //requiring local modeles
 var configs = require('./config');
 var routes = require('./routes/routes');

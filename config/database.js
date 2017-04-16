@@ -1,6 +1,8 @@
 var Sequelize = require('sequelize');
 var configs = require('../config');
 
+var onHeroku = !!process.env.DYNO;
+
 //connect to database
 var sequelize = onHeroku ?
   new Sequelize(process.env.DATABASE_URL, {
