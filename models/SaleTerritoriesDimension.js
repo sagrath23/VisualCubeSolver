@@ -1,32 +1,25 @@
 var db = require('../config/database');
 var Sequelize = require('sequelize');
-var LocationsDim = require('./LocationsDimension').LocationsDim;
 
 /*
-Persons Dimension Model
+Sale territories Dimension Model
 */
-var SaleTerritoriesDim = db.define('sale_territories_dimension', {
+var SaleTerritoriesDimension = db.define('sale_territories_dimension', {
   //llave foranea a ubicacion geográfica
   name: {
     type: Sequelize.STRING,
     allowNull: false
   },
-  saleTerritoryRegion: {
+  countryRegion:{
     type: Sequelize.STRING
   },
-  saleTerritoryCountry: {
-    type: Sequelize.STRING
-  },
-  locationId: {
-    type: Sequelize.INTEGER,
-    references: {
-      model: LocationsDim,
-      key: 'id',
-      deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
-    }
-  }
+  group: Sequelize.STRING,
+  salesYearToDate: Sequelize.DOUBLE,
+  salesLastYear: Sequelize.DOUBLE,
+  costYearToDate: Sequelize.DOUBLE,
+  costLastyear: Sequelize.DOUBLE
 });
 
 module.exports = {
-  SaleTerritoriesDim: SaleTerritoriesDim
+  SaleTerritoriesDimension: SaleTerritoriesDimension
 };

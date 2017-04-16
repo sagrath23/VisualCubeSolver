@@ -2,16 +2,18 @@ var db = require('../config/database');
 var Sequelize = require('sequelize');
 
 /*
-Persons Dimension Model
+Sale territories Dimension Model
 */
-var ProductCategoriesDim = db.define('product_categories_dimension', {
+var ShipMethodsDimension = db.define('ship_methods_dimension', {
   //llave foranea a ubicacion geográfica
   name: {
     type: Sequelize.STRING,
     allowNull: false
-  }
+  },
+  shipBase: Sequelize.DOUBLE,
+  shipRate: Sequelize.DOUBLE
 });
 
 module.exports = {
-  ProductCategoriesDim: ProductCategoriesDim
+  ShipMethodsDimension: ShipMethodsDimension
 };
