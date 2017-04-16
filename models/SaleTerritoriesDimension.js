@@ -6,13 +6,8 @@ Sale territories Dimension Model
 */
 var SaleTerritoriesDimension = db.define('sale_territories_dimension', {
   //llave foranea a ubicacion geográfica
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  countryRegion:{
-    type: Sequelize.STRING
-  },
+  name: Sequelize.STRING,
+  countryRegion: Sequelize.STRING,
   group: Sequelize.STRING,
   salesYearToDate: Sequelize.DOUBLE,
   salesLastYear: Sequelize.DOUBLE,

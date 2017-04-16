@@ -6,10 +6,7 @@ Sale territories Dimension Model
 */
 var ShipMethodsDimension = db.define('ship_methods_dimension', {
   //llave foranea a ubicacion geográfica
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
+  name: Sequelize.STRING,
   shipBase: Sequelize.DOUBLE,
   shipRate: Sequelize.DOUBLE
 });

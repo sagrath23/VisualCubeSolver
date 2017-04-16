@@ -18,6 +18,14 @@ var SaleTerritoriesDimension = require('./SaleTerritoriesDimension').SaleTerrito
 var ShipMethodsDimension = require('./ShipMethodsDimension').ShipMethodsDimension;
 
 var SpecialOffersDimension = require('./SpecialOffersDimension').SpecialOffersDimension;
+
+var SalesOrdersFact = require('./SalesOrdersFact').SalesOrdersFact;
+
+var SalesOrderDetailsFact = require('./SalesOrderDetailsFact').SalesOrderDetailsFact;
+
+var SalesOrderReasonsFact = require('./SalesOrderReasonsFact').SalesOrderReasonsFact;
+
+
 //sync model
 db.sync({
   force: true
@@ -30,10 +38,15 @@ db.sync({
 
 module.exports = {
   CurrencyRatesDimension: CurrencyRatesDimension,
+  CustomersDimension: CustomersDimension,
+  ProductCategoriesDimension : ProductCategoriesDimension,
+  ProductsDimension: ProductsDimension,
   SaleReasonsDimension: SaleReasonsDimension,
+  SalesOrderDetailsFact: SalesOrderDetailsFact,
+  SalesOrderReasonsFact: SalesOrderReasonsFact,
+  SalesOrdersFact: SalesOrdersFact,
+  SalesPersonsDimension: SalesPersonsDimension,
   SaleTerritoriesDimension: SaleTerritoriesDimension,
   ShipMethodsDimension: ShipMethodsDimension,
-  SpecialOffersDimension: SpecialOffersDimension,
-  SalesPersonsDimension: SalesPersonsDimension,
-  CustomersDimension: CustomersDimension
+  SpecialOffersDimension: SpecialOffersDimension
 };

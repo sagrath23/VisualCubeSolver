@@ -1,6 +1,6 @@
 var db = require('../config/database');
 var Sequelize = require('sequelize');
-var SalesOrderFact = require('./SalesOrderFact').SalesOrderFact;
+var SalesOrdersFact = require('./SalesOrdersFact').SalesOrdersFact;
 var ProductsDimension = require('./ProductsDimension').ProductsDimension;
 var SpecialOffersDimension = require('./SpecialOffersDimension').SpecialOffersDimension;
 
@@ -12,7 +12,7 @@ var SalesOrderDetailsFact = db.define('sales_order_details_fact', {
   salesOrderId: {
     type: Sequelize.INTEGER,
     references: {
-      model: SalesOrderFact,
+      model: SalesOrdersFact,
       key: 'id',
       deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
     }
@@ -24,7 +24,7 @@ var SalesOrderDetailsFact = db.define('sales_order_details_fact', {
     references: {
       model: ProductsDimension,
       key: 'id',
-      deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+      deferrable: Sequelize.Deferrable.NOT
     }
   },
   specialOfferId: {
@@ -32,7 +32,7 @@ var SalesOrderDetailsFact = db.define('sales_order_details_fact', {
     references: {
       model: SpecialOffersDimension,
       key: 'id',
-      deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+      deferrable: Sequelize.Deferrable.NOT
     }
   },
   unitPrice: Sequelize.DOUBLE,

@@ -6,13 +6,8 @@ Special Offers Dimension Model
 */
 var SpecialOffersDimension = db.define('special_offers_dimension', {
   //llave foranea a ubicacion geográfica
-  description: {
-    type: Sequelize.TEXT,
-    allowNull: false
-  },
-  discountPercent: {
-    type: Sequelize.DOUBLE
-  },
+  description: Sequelize.TEXT,
+  discountPercent: Sequelize.DOUBLE,
   type: Sequelize.STRING,
   category: Sequelize.STRING,
   startDate: Sequelize.DATE,

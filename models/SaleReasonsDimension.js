@@ -6,10 +6,7 @@ Sale reason Dimension Model
 */
 var SaleReasonsDimension = db.define('sale_reasons_dimension', {
   //llave foranea a ubicacion geográfica
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
+  name: Sequelize.STRING,
   reasonType: Sequelize.STRING
 });
 

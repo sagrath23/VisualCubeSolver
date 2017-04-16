@@ -9,7 +9,7 @@ var CurrencyRatesDimension = require('./CurrencyRatesDimension').CurrencyRatesDi
 /*
 Sale reason Dimension Model
 */
-var SalesOrderFact = db.define('sales_orders_fact', {
+var SalesOrdersFact = db.define('sales_orders_fact', {
   //llave foranea a ubicacion geográfica
   revisionNumber: Sequelize.INTEGER,
   orderDate: Sequelize.DATE,
@@ -24,7 +24,7 @@ var SalesOrderFact = db.define('sales_orders_fact', {
     references: {
       model: CustomersDimension,
       key: 'id',
-      deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+      deferrable: Sequelize.Deferrable.NOT
     }
   },
   salePersonId: {
@@ -32,7 +32,7 @@ var SalesOrderFact = db.define('sales_orders_fact', {
     references: {
       model: SalesPersonsDimension,
       key: 'id',
-      deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+      deferrable: Sequelize.Deferrable.NOT
     }
   },
   territoryId: {
@@ -40,7 +40,7 @@ var SalesOrderFact = db.define('sales_orders_fact', {
     references: {
       model: SaleTerritoriesDimension,
       key: 'id',
-      deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+      deferrable: Sequelize.Deferrable.NOT
     }
   },
   shipMethodId: {
@@ -48,15 +48,15 @@ var SalesOrderFact = db.define('sales_orders_fact', {
     references: {
       model: ShipMethodsDimension,
       key: 'id',
-      deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+      deferrable: Sequelize.Deferrable.NOT
     }
   },
   currencyRateId: {
     type: Sequelize.INTEGER,
     references: {
-      model: CurrencyRateDimension,
+      model: CurrencyRatesDimension,
       key: 'id',
-      deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+      deferrable: Sequelize.Deferrable.NOT
     }
   },
   taxAmount: Sequelize.DOUBLE,
@@ -66,5 +66,5 @@ var SalesOrderFact = db.define('sales_orders_fact', {
 });
 
 module.exports = {
-  SalesOrderFact: SalesOrderFact
+  SalesOrdersFact: SalesOrdersFact
 };
