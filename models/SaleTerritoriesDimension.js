@@ -5,7 +5,11 @@ var Sequelize = require('sequelize');
 Sale territories Dimension Model
 */
 var SaleTerritoriesDimension = db.define('sale_territories_dimension', {
-  //llave foranea a ubicacion geográfica
+  SalesTerritoryId: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
   name: Sequelize.STRING,
   countryRegion: Sequelize.STRING,
   group: Sequelize.STRING,

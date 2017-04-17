@@ -20,7 +20,7 @@ var SalesOrderReasonsFact = db.define('sales_order_reasons_fact', {
     type: Sequelize.INTEGER,
     references: {
       model: SaleReasonsDimension,
-      key: 'id',
+      key: 'salesReasonId',
       deferrable: Sequelize.Deferrable.NOT
     }
   }

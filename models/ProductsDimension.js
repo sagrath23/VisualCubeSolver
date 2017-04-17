@@ -6,18 +6,23 @@ var ProductCategoriesDimension = require('./ProductCategoriesDimension').Product
 Special Offers Dimension Model
 */
 var ProductsDimension = db.define('products_dimension', {
- name: Sequelize.STRING,
- makeFlag: Sequelize.BOOLEAN,
- finishedGoodsFlag: Sequelize.BOOLEAN,
- color: Sequelize.STRING,
- standardCost: Sequelize.DOUBLE,
- listPrice: Sequelize.DOUBLE,
- productCategory: {
-   type: Sequelize.INTEGER,
-   references: {
-     model: ProductCategoriesDimension,
-     key: 'id',
-     deferrable: Sequelize.Deferrable.NOT
+  ProductId: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  name: Sequelize.STRING,
+  makeFlag: Sequelize.BOOLEAN,
+  finishedGoodsFlag: Sequelize.BOOLEAN,
+  color: Sequelize.STRING,
+  standardCost: Sequelize.DOUBLE,
+  listPrice: Sequelize.DOUBLE,
+  ProductSubcategoryId: {
+    type: Sequelize.INTEGER,
+    references: {
+      model: ProductCategoriesDimension,
+      key: 'ProductSubcategoryId',
+      deferrable: Sequelize.Deferrable.NOT
    }
  }
 });

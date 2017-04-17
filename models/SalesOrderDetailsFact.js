@@ -23,7 +23,7 @@ var SalesOrderDetailsFact = db.define('sales_order_details_fact', {
     type: Sequelize.INTEGER,
     references: {
       model: ProductsDimension,
-      key: 'id',
+      key: 'ProductId',
       deferrable: Sequelize.Deferrable.NOT
     }
   },
@@ -31,7 +31,7 @@ var SalesOrderDetailsFact = db.define('sales_order_details_fact', {
     type: Sequelize.INTEGER,
     references: {
       model: SpecialOffersDimension,
-      key: 'id',
+      key: 'SpecialOfferID',
       deferrable: Sequelize.Deferrable.NOT
     }
   },

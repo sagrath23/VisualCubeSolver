@@ -3,7 +3,7 @@ var configs = require('../config');
 
 var onHeroku = !!process.env.DYNO;
 
-//connect to database
+//DWH Connection
 var sequelize = onHeroku ?
   new Sequelize(process.env.DATABASE_URL, {
     dialect: 'postgres',
