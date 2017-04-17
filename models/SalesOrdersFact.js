@@ -39,7 +39,7 @@ var SalesOrdersFact = db.define('sales_orders_fact', {
     type: Sequelize.INTEGER,
     references: {
       model: SaleTerritoriesDimension,
-      key: 'id',
+      key: 'SalesTerritoryId',
       deferrable: Sequelize.Deferrable.NOT
     }
   },
