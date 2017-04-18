@@ -102,54 +102,74 @@ helpers.transformSaleTerritories = function(saleTerritories){
   //mirar si hay que agregar null
   return newTerritories;
 };
-// //Function that checks if the request is authenticated or not.
-// helpers.isAuthenticated = function(req, res, next) {
-//
-//   if (!req.query.sessionId) {
-//     res.status(401);
-//     res.send({
-//       status: 'error',
-//       error: 'Not Authorized.'
-//     });
-//   } else {
-//     var user = Users.getBySessionId(req.query.sessionId);
-//     user.then(function(dbuser) {
-//       if (dbuser) {
-//         next();
-//       } else {
-//         res.status(401);
-//         res.send({
-//           status: 'error',
-//           error: 'Not Authorized.'
-//         });
-//       }
-//     });
-//
-//   }
-// }
-//
-// //Function to populate data in DB if DB is empty.
-// helpers.populateDb = function() {
-//   var promise = Users.get();
-//   promise.then(function(data) {
-//     if (data.length) {
-//       console.log('Users table already populated.');
-//     } else {
-//       console.log('Populating users table.');
-//       Users.seed();
-//     }
-//   });
-//
-//   var promise2 = Videos.get();
-//   promise2.then(function(data) {
-//
-//     if (data.length) {
-//       console.log('videos table already populated.');
-//     } else {
-//       console.log('Populating videos table.');
-//       Videos.seed();
-//     }
-//   });
-// }
-//
+
+helpers.transformDates = function(dates){
+  var newDates = [];
+  for(var i = 0; i < dates.length; i++){
+    var date = {
+      dateName: dates[i].datename,
+      dateMin: dates[i].mindate,
+      dateMax: dates[i].maxdate
+    }
+    newDates.push(date);
+  }
+
+  return newDates;
+};
+
+helpers.transformCurrencies = function(currencies){
+  var newCurrencies = [];
+  for(var i = 0; i < currencies.length; i++){
+    var currency = {
+      currencyCode: currencies[i].currencycode,
+      name: currencies[i].name
+    }
+    newCurrencies.push(currency);
+  }
+
+  return newCurrencies;
+};
+
+helpers.transformCurrencyRates = function(currencyRates,currenciesRanges,datesRanges){
+  var me = this,
+      newRates = [];
+  for(var i = 0; i < currencyRates.length; i++){
+    var currencyRate = {
+      dateDimensionId: me.findDateDimensionId(currencyRates[i].currencyratedate,datesRanges),
+      currencyRateDate: currencyRates[i].currencyratedate,
+      fromCurrencyCode: me.findCurrencyDimensionId(currencyRates[i].fromcurrencycode,currenciesRanges),
+      toCurrencyCode: me.findCurrencyDimensionId(currencyRates[i].tocurrencycode,currenciesRanges),
+      averrageRate: currencyRates[i].averagerate,
+      endOfDayRate: currencyRates[i].endofdayrate
+    }
+    newRates.push(currency);
+  }
+
+  return newRates;
+};
+
+helpers.findDateDimensionId = function(currencyRateDate,datesRanges){
+  var rateDate = new Date(currencyRateDate);
+  for(var i = 0; i < datesRanges.length; i++){
+    var minDate = new Date(datesRanges[i].dateMin),
+        maxDate = new Date(datesRanges[i].dateMax);
+    if(rateDate >= minDate && rateDate <= maxDate){
+      return datesRanges[i].dateDimensionId;
+    }
+  }
+  return -1;
+};
+
+helpers.findCurrencyDimensionId = function(currencyCode,currenciesRanges){
+  for(var i = 0; i < currenciesRanges.length; i++){
+    //verificar estructura
+    console.log(currenciesRanges[i]);
+    if(currenciesRanges[i].currencyCode == currencyCode){
+      return currenciesRanges[i].currencyId;
+    }
+  }
+  return -1;
+
+};
+
 module.exports = helpers;

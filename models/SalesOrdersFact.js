@@ -1,17 +1,30 @@
 var db = require('../config/database');
 var Sequelize = require('sequelize');
+var DatesDimension = require('./DatesDimension').DatesDimension;
 var CustomersDimension = require('./CustomersDimension').CustomersDimension;
 var SalesPersonsDimension = require('./SalesPersonsDimension').SalesPersonsDimension;
 var SaleTerritoriesDimension = require('./SaleTerritoriesDimension').SaleTerritoriesDimension;
 var ShipMethodsDimension = require('./ShipMethodsDimension').ShipMethodsDimension;
-var CurrencyRatesDimension = require('./CurrencyRatesDimension').CurrencyRatesDimension;
+var CurrenciesDimension = require('./CurrenciesDimension').CurrenciesDimension;
 
 /*
 Sale reason Dimension Model
 */
 var SalesOrdersFact = db.define('sales_orders_fact', {
-  //llave foranea a ubicacion geográfica
+  SalesOrderId:{
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
   revisionNumber: Sequelize.INTEGER,
+  dateDimensionId: {
+    type: Sequelize.INTEGER,
+    references: {
+      model: DatesDimension,
+      key: 'dateDimensionId',
+      deferrable: Sequelize.Deferrable.NOT
+    }
+  },
   orderDate: Sequelize.DATE,
   dueDate: Sequelize.DATE,
   shipDate: Sequelize.DATE,
@@ -51,11 +64,11 @@ var SalesOrdersFact = db.define('sales_orders_fact', {
       deferrable: Sequelize.Deferrable.NOT
     }
   },
-  currencyRateId: {
+  currencyId: {
     type: Sequelize.INTEGER,
     references: {
-      model: CurrencyRatesDimension,
-      key: 'id',
+      model: CurrenciesDimension,
+      key: 'currencyId',
       deferrable: Sequelize.Deferrable.NOT
     }
   },
