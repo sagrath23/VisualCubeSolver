@@ -1,6 +1,7 @@
 var db = require('../config/database');
 var sourceDb = require('../config/oltpdatabase');
 var Sequelize = require('sequelize');
+var Promise = require("bluebird");
 
 var helpers = require('../helpers/helperFunctions');
 
