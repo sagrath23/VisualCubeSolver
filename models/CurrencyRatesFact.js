@@ -7,7 +7,7 @@ var CurrenciesDimension = require('./CurrenciesDimension').CurrenciesDimension;
 /*
 Sale territories Dimension Model
 */
-var CurrencyRatesDimension = db.define('currency_rates_dimension', {
+var CurrencyRatesFact = db.define('currency_rates_fact', {
   //llave foranea a ubicacion geográfica
   dateDimensionId: {
     type: Sequelize.INTEGER,
@@ -39,5 +39,5 @@ var CurrencyRatesDimension = db.define('currency_rates_dimension', {
 });
 
 module.exports = {
-  CurrencyRatesDimension: CurrencyRatesDimension
+  CurrencyRatesFact: CurrencyRatesFact
 };
