@@ -198,6 +198,38 @@ helpers.transformSalePersons = function(salesPersons) {
   return newPersons;
 }
 
+helpers.transformSalesOrders = function(salesOrders, DatesDimension) {
+  var me = this,
+    newOrders = [];
+  for (var i = 0; i < salesOrders.length; i++) {
+    var order = {
+      SalesOrderId: ,
+      revisionNumber: Sequelize.INTEGER,
+      dateDimensionId: me.findDateDimensionId(salesOrders[i].orderdate,
+        DatesDimension),
+      orderDate: salesOrders[i].orderdate,
+      dueDate: salesOrders[i].duedate,
+      shipDate: salesOrders[i].shipdate,
+      status: salesOrders[i].status,
+      onlineOrderFlag: salesOrders[i].onlineorderflag,
+      purchaseOrderNumber: salesOrders[i].purchaseordernumber,
+      accountNumber: salesOrders[i].accountnumber,
+      customerId: salesOrders[i].customerid,
+      salePersonId: salesOrders[i].salepersonid,
+      territoryId: salesOrders[i].territoryid,
+      shipMethodId: salesOrders[i].shipmethodid,
+      currencyId: salesOrders[i].orderdate, //revisar
+      taxAmount: salesOrders[i].taxamt,
+      freight: salesOrders[i].freight,
+      totalDue: salesOrders[i].totaldue,
+      comment: salesOrders[i].comment
+    }
+    newOrders.push(order);
+  }
+
+  return newOrders;
+}
+
 helpers.findDateDimensionId = function(currencyRateDate, datesRanges) {
   var rateDate = new Date(currencyRateDate);
   for (var i = 0; i < datesRanges.length; i++) {

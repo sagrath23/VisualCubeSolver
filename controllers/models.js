@@ -8,13 +8,14 @@ var helpers = require('../helpers/helperFunctions');
 var Models = require('../models/bootstrap');
 
 exports.sync = function(req, res, next) {
-  var productDependencies = [];
+  var productDependencies = [],
+    datesRanges = [];
 
   var promises = [];
   console.log("loading dimensions...");
   var currenciesRanges = [];
 
-
+  //fix this shit to work with bluebird
   //extract, transform & load dates Dimension
   sourceDb.query(
       "SELECT MIN(cr.currencyratedate) AS mindate, MAX(cr.currencyratedate) AS maxdate, CONCAT(EXTRACT(YEAR FROM cr.currencyratedate),EXTRACT(MONTH FROM cr.currencyratedate)) AS datename FROM Sales.CurrencyRate cr GROUP BY datename ORDER BY mindate ASC", {
@@ -31,6 +32,7 @@ exports.sync = function(req, res, next) {
         })
         .then(function(DatesDimension) {
           console.log("Dates dimension Uploaded");
+          datesRanges = DatesDimension;
 
           console.log(
             "trying to sync currencies dimensions & currencies rates facts..."
@@ -180,23 +182,27 @@ exports.sync = function(req, res, next) {
     });
 
   //the good stuff starts here
-  //extract SalesOrders data from sourceDb
-  sourceDb.query("SELECT * FROM Sales.SalesOrderHeader", {
-      type: sourceDb.QueryTypes.SELECT
-    })
-    .then(function(salesOrders) {
-      console.log("found " + salesOrders.length +
-        " sales orders records");
-      //console.log(salesTerritories);
-      //transfrom & load to DWH Dimension
-      //Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(
-      //salesTerritories));
-      //console.log("SalesTerritories Uploaded");
-    });
+
 
   Promise.all(promises).then(function() {
     console.log('all promises are answered!!! Yeah madafacas');
+    //extract SalesOrders data from sourceDb
+    sourceDb.query("SELECT * FROM Sales.SalesOrderHeader", {
+        type: sourceDb.QueryTypes.SELECT
+      })
+      .then(function(salesOrders) {
+        console.log("found " + salesOrders.length +
+          " sales orders records");
+        //console.log(salesTerritories);
+        //transfrom & load to DWH Dimension
+        Models.SalesOrdersFact.bulkCreate(helpers.transformSalesOrders(
+          salesOrders, datesRanges)).then(function() {
+          console.log("SalesOrders Uploaded");
+        });
+        //console.log("SalesTerritories Uploaded");
+      });
   });
 
-  res.send("AdventureWorks Data Warehouse Model Synchronization Success!");
+  res.send(
+    "AdventureWorks Data Warehouse Model Synchronization Success!");
 };
