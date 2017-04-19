@@ -185,7 +185,7 @@ exports.sync = function(req, res, next) {
 
 
   Promise.all(promises).then(function() {
-    console.log('all promises are answered!!! Yeah madafacas');
+
     //extract SalesOrders data from sourceDb
     sourceDb.query("SELECT * FROM Sales.SalesOrderHeader", {
         type: sourceDb.QueryTypes.SELECT
@@ -196,10 +196,8 @@ exports.sync = function(req, res, next) {
         //console.log(salesTerritories);
         //transfrom & load to DWH Dimension
         Models.SalesOrdersFact.bulkCreate(helpers.transformSalesOrders(
-          salesOrders, datesRanges)).then(function() {
-          console.log("SalesOrders Uploaded");
-        });
-        //console.log("SalesTerritories Uploaded");
+          salesOrders, datesRanges));
+        console.log("Sales orders Uploaded");
       });
   });
 
