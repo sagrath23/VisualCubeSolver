@@ -173,7 +173,7 @@ helpers.transformCustomers = function(customers) {
     newCustomers.push(customer);
   }
 
-  return newRates;
+  return newCustomers;
 }
 
 helpers.findDateDimensionId = function(currencyRateDate, datesRanges) {
