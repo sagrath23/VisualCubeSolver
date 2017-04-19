@@ -124,6 +124,18 @@ exports.sync = function(req, res, next) {
       console.log("Special offers Uploaded");
     });
 
+  //extract customers data from sourceDb
+  sourceDb.query(
+      "SELECT * FROM Sales.Customer cus", {
+        type: sourceDb.QueryTypes.SELECT
+      })
+    .then(function(customers) {
+      console.log("found " + customers.length + " customers records");
+      //console.log(customers);
+      //transfrom & load to DWH Dimension
+      //Models.SpecialOffersDimension.bulkCreate(helpers.transformSpecialOffers(specialOffers));
+      console.log("Special offers Uploaded");
+    });
 
   res.send("AdventureWorks Data Warehouse Model Synchronization Success!");
 };
