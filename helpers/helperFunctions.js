@@ -167,7 +167,6 @@ helpers.findDateDimensionId = function(currencyRateDate, datesRanges) {
 helpers.findCurrencyDimensionId = function(currencyCode, currenciesRanges) {
   for (var i = 0; i < currenciesRanges.length; i++) {
     //verificar estructura
-    console.log(currenciesRanges[i]);
     if (currenciesRanges[i].currencyCode == currencyCode) {
       return currenciesRanges[i].currencyId;
     }
