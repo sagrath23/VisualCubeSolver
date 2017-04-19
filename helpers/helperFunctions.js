@@ -164,8 +164,8 @@ helpers.transformCurrencyRates = function(currencyRates, currenciesRanges,
 helpers.findDateDimensionId = function(currencyRateDate, datesRanges) {
   var rateDate = new Date(currencyRateDate);
   for (var i = 0; i < datesRanges.length; i++) {
-    var minDate = new Date(datesRanges[i].dateMin),
-      maxDate = new Date(datesRanges[i].dateMax);
+    var minDate = new Date(datesRanges[i].mindate),
+      maxDate = new Date(datesRanges[i].maxdate);
     if (rateDate >= minDate && rateDate <= maxDate) {
       return datesRanges[i].dateDimensionId;
     }

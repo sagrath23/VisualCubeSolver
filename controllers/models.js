@@ -16,19 +16,18 @@ exports.sync = function(req, res, next) {
       })
     .then(function(dates) {
       console.log("found " + dates.length + " dates records...");
-      //copy date ranges to process load data without load dates ranges again
-      datesRanges = dates;
       //transfrom & load to DWH Dimension
       Models.DatesDimension.bulkCreate(helpers.transformDates(dates))
         .then(function() {
+          //get dimension to sync with all the data
           return Models.DatesDimension.findAll();
         })
         .then(function(DatesDimension) {
           console.log("Dates dimension Uploaded");
+
           console.log(
             "trying to sync currencies dimensions & currencies rates facts..."
           );
-
           //extract, transform & load currencies Dimension
           sourceDb.query(
               "SELECT cur.currencycode,cur.name FROM Sales.Currency cur", {
@@ -42,7 +41,7 @@ exports.sync = function(req, res, next) {
                   currencies))
                 .then(function() {
                   return Models.CurrenciesDimension.findAll();
-                }).then(function(newCurrencies) {
+                }).then(function(CurrenciesDimension) {
                   console.log("Currencies Dimension uploaded");
                   //extract, transform & load currency rates facts
                   sourceDb.query("SELECT * FROM Sales.CurrencyRate", {
@@ -52,23 +51,16 @@ exports.sync = function(req, res, next) {
                       console.log("found " + currencyRates.length +
                         " currency rates records");
                       //transfrom & load to DWH Dimension
-                      console.log(Models);
-                      if (typeof Models.CurrencyRatesFact !=
-                        'undefined') {
-                        Models.CurrencyRatesFact.bulkCreate(helpers
-                          .transformCurrencyRates(
-                            currencyRates, newCurrencies,
-                            datesRanges)).then(function() {
-                          console.log(
-                            "Currencies Rates Facts Uploaded"
-                          );
-                        });
+                      Models.CurrencyRatesFact.bulkCreate(helpers
+                        .transformCurrencyRates(
+                          currencyRates, CurrenciesDimension,
+                          DatesDimension)).then(function() {
                         console.log(
-                          "Currencies Rates Facts Uploaded");
-                      } else {
-                        console.log('Fuck that nigga shit...');
-                      }
-
+                          "Currencies Rates Facts Uploaded"
+                        );
+                      });
+                      console.log(
+                        "Currencies Rates Facts Uploaded");
                     });
 
                 });
