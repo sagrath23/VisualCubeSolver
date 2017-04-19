@@ -105,7 +105,7 @@ exports.sync = function(req, res, next) {
 
   //validate dependency of products
   Promise.all(productDependencies).then(function() {
-    console.log("Loaded product dimension dependencies");
+    console.log("Init load product dimension dependencies madafacas");
     //extract products data from sourceDb
     sourceDb.query(
         "SELECT pr.ProductID, pr.Name, pr.MakeFlag, pr.FinishedGoodsFlag,pr.Color,pr.StandardCost,pr.ListPrice,COALESCE(pr.ProductSubcategoryID,-1) AS ProductSubcategoryID FROM Production.Product pr ", {
