@@ -52,13 +52,22 @@ exports.sync = function(req, res, next) {
                       console.log("found " + currencyRates.length +
                         " currency rates records");
                       //transfrom & load to DWH Dimension
-                      Models.CurrencyRatesFact.bulkCreate(helpers.transformCurrencyRates(
-                        currencyRates, newCurrencies,
-                        datesRanges)).then(function() {
+                      if (typeof Models.CurrencyRatesFact !=
+                        'undefined') {
+                        Models.CurrencyRatesFact.bulkCreate(helpers
+                          .transformCurrencyRates(
+                            currencyRates, newCurrencies,
+                            datesRanges)).then(function() {
+                          console.log(
+                            "Currencies Rates Facts Uploaded"
+                          );
+                        });
                         console.log(
                           "Currencies Rates Facts Uploaded");
-                      });
-                      console.log("Currencies Rates Facts Uploaded");
+                      } else {
+                        console.log('Fuck that nigga shit...');
+                      }
+
                     });
 
                 });
@@ -73,11 +82,12 @@ exports.sync = function(req, res, next) {
       type: sourceDb.QueryTypes.SELECT
     })
     .then(function(reasons) {
-      console.log("found " + reasons.length + " records");
+      console.log("found " + reasons.length + " sales reasons records");
       //transfrom & load to DWH Dimension
       Models.SaleReasonsDimension.bulkCreate(helpers.transformSalesReasons(
-        reasons));
-      console.log("Sales Reasons Uploaded");
+        reasons)).then(function() {
+        console.log("Sales Reasons Dimension Uploaded");
+      });
     });
 
   //extract product categories & subcategories data from sourceDb
@@ -86,11 +96,14 @@ exports.sync = function(req, res, next) {
         type: sourceDb.QueryTypes.SELECT
       })
     .then(function(categories) {
-      console.log("found " + categories.length + " records");
+      console.log("found " + categories.length +
+        " product categories records");
       //transfrom & load to DWH Dimension
       Models.ProductCategoriesDimension.bulkCreate(helpers.transformProductCategories(
-        categories));
-      console.log("Product Categories Uploaded");
+        categories)).then(function() {
+        console.log("Product Categories Uploaded");
+      });
+
     });
 
   //extract products data from sourceDb
