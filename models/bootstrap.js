@@ -35,9 +35,6 @@ var CurrenciesDimension = require('./CurrenciesDimension').CurrenciesDimension;
 db.sync({
   force: true
 }).then(function() {
-  var datesRanges = null;
-  var currenciesRanges = null;
-
   console.log("Dimensional model created");
   return true;
 });
@@ -46,6 +43,7 @@ module.exports = {
   CurrenciesDimension: CurrenciesDimension,
   CurrencyRatesFact: CurrencyRatesFact,
   CustomersDimension: CustomersDimension,
+  DatesDimension: DatesDimension,
   ProductCategoriesDimension: ProductCategoriesDimension,
   ProductsDimension: ProductsDimension,
   SaleReasonsDimension: SaleReasonsDimension,

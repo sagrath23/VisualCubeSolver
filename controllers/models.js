@@ -8,50 +8,65 @@ var Models = require('../models/bootstrap');
 
 exports.sync = function(req, res, next) {
   console.log("loading dimensions...");
+  var currenciesRanges = [];
   //extract, transform & load dates Dimension
   sourceDb.query(
       "SELECT MIN(cr.currencyratedate) AS mindate, MAX(cr.currencyratedate) AS maxdate, CONCAT(EXTRACT(YEAR FROM cr.currencyratedate),EXTRACT(MONTH FROM cr.currencyratedate)) AS datename FROM Sales.CurrencyRate cr GROUP BY datename ORDER BY mindate ASC", {
         type: sourceDb.QueryTypes.SELECT
       })
     .then(function(dates) {
-      console.log("found " + dates.length + " records");
+      console.log("found " + dates.length + " dates records...");
       //copy date ranges to process load data without load dates ranges again
       datesRanges = dates;
       //transfrom & load to DWH Dimension
-      Models.DatesDimension.bulkCreate(helpers.transformDates(dates));
-      console.log("Dates dimension Uploaded");
-    });
-
-  //extract, transform & load currencies Dimension
-  sourceDb.query("SELECT cur.currencycode,cur.name FROM Sales.Currency cur", {
-      type: sourceDb.QueryTypes.SELECT
-    })
-    .then(function(currencies) {
-      console.log("found " + currencies.length + " records");
-      //transfrom & load to DWH Dimension
-      Models.CurrenciesDimension.bulkCreate(helpers.transformCurrencies(
-          currencies))
+      Models.DatesDimension.bulkCreate(helpers.transformDates(dates))
         .then(function() {
-          return Models.CurrenciesDimension.findAll();
-        }).then(function(newCurrencies) {
-          currenciesRanges = newCurrencies;
-          console.log(currenciesRanges);
+          return Models.DatesDimension.findAll();
+        })
+        .then(function(DatesDimension) {
+          console.log("Dates dimension Uploaded");
+          console.log(
+            "trying to sync currencies dimensions & currencies rates facts..."
+          );
+
+          //extract, transform & load currencies Dimension
+          sourceDb.query(
+              "SELECT cur.currencycode,cur.name FROM Sales.Currency cur", {
+                type: sourceDb.QueryTypes.SELECT
+              })
+            .then(function(currencies) {
+              console.log("found " + currencies.length +
+                " currencies records");
+              //transfrom & load to DWH Dimension
+              Models.CurrenciesDimension.bulkCreate(helpers.transformCurrencies(
+                  currencies))
+                .then(function() {
+                  return Models.CurrenciesDimension.findAll();
+                }).then(function(newCurrencies) {
+                  console.log("Currencies Dimension uploaded");
+                  //extract, transform & load currency rates facts
+                  sourceDb.query("SELECT * FROM Sales.CurrencyRate", {
+                      type: sourceDb.QueryTypes.SELECT
+                    })
+                    .then(function(currencyRates) {
+                      console.log("found " + currencyRates.length +
+                        " currency rates records");
+                      //transfrom & load to DWH Dimension
+                      Models.CurrencyRatesFact.bulkCreate(helpers.transformCurrencyRates(
+                        currencyRates, newCurrencies,
+                        datesRanges)).then(function() {
+                        console.log(
+                          "Currencies Rates Facts Uploaded");
+                      });
+                      console.log("Currencies Rates Facts Uploaded");
+                    });
+
+                });
+              console.log("Currencies dimension Uploaded");
+            });
         });
-      console.log("Currencies dimension Uploaded");
     });
 
-  //extract, transform & load currency rates facts
-  sourceDb.query("SELECT * FROM Sales.CurrencyRate", {
-      type: sourceDb.QueryTypes.SELECT
-    })
-    .then(function(currencyRates) {
-      console.log("found " + currencyRates.length + " records");
-      //transfrom & load to DWH Dimension
-      Models.CurrencyRatesFact.bulkCreate(helpers.transformCurrencyRates(
-        currencyRates, currenciesRanges, datesRanges));
-
-      console.log("Currencies Rates Facts Uploaded");
-    });
 
   //extract Sales Reasons data from sourceDb
   sourceDb.query("SELECT * FROM Sales.SalesReason", {
