@@ -176,6 +176,28 @@ helpers.transformCustomers = function(customers) {
   return newCustomers;
 };
 
+helpers.transformSalePersons = function(salesPersons) {
+  var me = this,
+    newPersons = [];
+  for (var i = 0; i < salesPersons.length; i++) {
+    var person = {
+      businessEntityID: salesPersons[i].businessentityid,
+      title: salesPersons[i].title,
+      firstName: salesPersons[i].firstname,
+      middleName: salesPersons[i].middlename,
+      lastName: salesPersons[i].lastname,
+      salesQuota: salesPersons[i].salesquota,
+      bonus: salesPersons[i].bonus,
+      commissionPercent: salesPersons[i].commissionpct,
+      salesYearToDate: salesPersons[i].salesytd,
+      salesLastYear: salesPersons[i].saleslastyear
+    }
+    newPersons.push(person);
+  }
+
+  return newPersons;
+}
+
 helpers.findDateDimensionId = function(currencyRateDate, datesRanges) {
   var rateDate = new Date(currencyRateDate);
   for (var i = 0; i < datesRanges.length; i++) {

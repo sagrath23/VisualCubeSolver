@@ -157,17 +157,17 @@ exports.sync = function(req, res, next) {
   //extract sales persons data from sourceDb
   sourceDb.query(
       //selecciono solo los clientes que son personas
-      "SELECT * FROM Sales.SalesPerson", {
+      "SELECT sp.BusinessEntityID, per.Title, per.FirstName, per.MiddleName, per.LastName, sp.SalesQuota, sp.Bonus, sp.CommissionPct, sp.SalesYTD, sp.SalesLastYear FROM Sales.SalesPerson sp INNER JOIN Person.Person per ON per.BusinessEntityID = sp.BusinessEntityID", {
         type: sourceDb.QueryTypes.SELECT
       })
     .then(function(salesPersons) {
       console.log("found " + salesPersons.length +
         " sales persons records");
-      //console.log(salesTerritories);
+
       //transfrom & load to DWH Dimension
-      //Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(
-      //salesTerritories));
-      console.log("SalesTerritories Uploaded");
+      Models.SalesPersonsDimension.bulkCreate(helpers.transformSalePersons(
+        salesPersons));
+      console.log("SalesPersons Uploaded");
     });
 
 
