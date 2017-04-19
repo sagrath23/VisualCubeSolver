@@ -139,11 +139,9 @@ exports.sync = function(req, res, next) {
     });
 
   //extract sales territories data from sourceDb
-  sourceDb.query(
-      //selecciono solo los clientes que son personas
-      "SELECT * FROM Sales.SalesTerritory", {
-        type: sourceDb.QueryTypes.SELECT
-      })
+  sourceDb.query("SELECT * FROM Sales.SalesTerritory", {
+      type: sourceDb.QueryTypes.SELECT
+    })
     .then(function(salesTerritories) {
       console.log("found " + salesTerritories.length +
         " sales territories records");
@@ -170,6 +168,19 @@ exports.sync = function(req, res, next) {
       console.log("SalesPersons Uploaded");
     });
 
+  //the good stuff starts here
+  //extract SalesOrders data from sourceDb
+  sourceDb.query("SELECT * FROM Sales.SalesOrderHeader", {
+      type: sourceDb.QueryTypes.SELECT
+    })
+    .then(function(salesOrders) {
+      console.log("found " + salesOrders.length +
+        " sales orders records");
+      //console.log(salesTerritories);
+      //transfrom & load to DWH Dimension
+      //Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(salesTerritories));
+      //console.log("SalesTerritories Uploaded");
+    });
 
   res.send("AdventureWorks Data Warehouse Model Synchronization Success!");
 };
