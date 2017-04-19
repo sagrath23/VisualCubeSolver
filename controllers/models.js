@@ -104,7 +104,7 @@ exports.sync = function(req, res, next) {
         type: sourceDb.QueryTypes.SELECT
       })
     .then(function(products) {
-      console.log("found " + products.length + " records");
+      console.log("found " + products.length + " products records");
       //transfrom & load to DWH Dimension
       Models.ProductsDimension.bulkCreate(helpers.transformProducts(
         products));
@@ -117,7 +117,8 @@ exports.sync = function(req, res, next) {
         type: sourceDb.QueryTypes.SELECT
       })
     .then(function(specialOffers) {
-      console.log("found " + specialOffers.length + " records");
+      console.log("found " + specialOffers.length +
+        " special offers records");
       //transfrom & load to DWH Dimension
       Models.SpecialOffersDimension.bulkCreate(helpers.transformSpecialOffers(
         specialOffers));
