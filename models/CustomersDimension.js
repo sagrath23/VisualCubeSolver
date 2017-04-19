@@ -5,11 +5,16 @@ var Sequelize = require('sequelize');
 Special Offers Dimension Model
 */
 var CustomersDimension = db.define('customers_dimension', {
- title: Sequelize.STRING,
- firstName: Sequelize.STRING,
- middleName: Sequelize.STRING,
- lastName: Sequelize.STRING,
- customerType: Sequelize.BOOLEAN
+  customerId: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  title: Sequelize.STRING,
+  firstName: Sequelize.STRING,
+  middleName: Sequelize.STRING,
+  lastName: Sequelize.STRING,
+  accountNumber: Sequelize.STRING
 });
 
 module.exports = {

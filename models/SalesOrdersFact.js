@@ -11,7 +11,7 @@ var CurrenciesDimension = require('./CurrenciesDimension').CurrenciesDimension;
 Sale reason Dimension Model
 */
 var SalesOrdersFact = db.define('sales_orders_fact', {
-  SalesOrderId:{
+  SalesOrderId: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true
@@ -36,7 +36,7 @@ var SalesOrdersFact = db.define('sales_orders_fact', {
     type: Sequelize.INTEGER,
     references: {
       model: CustomersDimension,
-      key: 'id',
+      key: 'customerId',
       deferrable: Sequelize.Deferrable.NOT
     }
   },

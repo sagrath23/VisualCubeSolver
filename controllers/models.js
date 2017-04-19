@@ -127,14 +127,15 @@ exports.sync = function(req, res, next) {
   //extract customers data from sourceDb
   sourceDb.query(
       //selecciono solo los clientes que son personas
-      "SELECT * FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NULL AND cus.StoreID IS NULL", {
+      "SELECT cus.CustomerID, per.FirstName, per.MiddleName, per.LastName, cus.AccountNumber FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL", {
         type: sourceDb.QueryTypes.SELECT
       })
     .then(function(customers) {
       console.log("found " + customers.length + " customers records");
       //console.log(customers);
       //transfrom & load to DWH Dimension
-      //Models.SpecialOffersDimension.bulkCreate(helpers.transformSpecialOffers(specialOffers));
+      Models.CustomersDimension.bulkCreate(helpers.transformCustomers(
+        customers));
       console.log("Special offers Uploaded");
     });
 

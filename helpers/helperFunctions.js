@@ -159,6 +159,24 @@ helpers.transformCurrencyRates = function(currencyRates, currenciesRanges,
   return newRates;
 };
 
+helpers.transformCustomers = function(customers) {
+  var me = this,
+    newCustomers = [];
+  for (var i = 0; i < customers.length; i++) {
+    var customer = {
+      customerId: customers[i].customerid,
+      title: customers[i].title,
+      firstName: customers[i].firstname,
+      middleName: customers[i].middlename,
+      lastName: customers[i].lastname,
+      accountNumber: customers[i].accountnumber
+    }
+    newCustomers.push(customer);
+  }
+
+  return newRates;
+}
+
 helpers.findDateDimensionId = function(currencyRateDate, datesRanges) {
   var rateDate = new Date(currencyRateDate);
   for (var i = 0; i < datesRanges.length; i++) {
