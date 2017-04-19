@@ -8,7 +8,6 @@ var helpers = require('../helpers/helperFunctions');
 var Models = require('../models/bootstrap');
 
 exports.sync = function(req, res, next) {
-
   var productDependencies = [];
 
   var promises = [];
@@ -98,7 +97,9 @@ exports.sync = function(req, res, next) {
         " product categories records");
       //transfrom & load to DWH Dimension
       productDependencies.push(Models.ProductCategoriesDimension.bulkCreate(
-        helpers.transformProductCategories(categories)));
+        helpers.transformProductCategories(categories)).then(function() {
+        console.log("product categories loaded");
+      }));
 
     });
 
