@@ -174,7 +174,7 @@ helpers.transformCustomers = function(customers) {
   }
 
   return newCustomers;
-}
+};
 
 helpers.findDateDimensionId = function(currencyRateDate, datesRanges) {
   var rateDate = new Date(currencyRateDate);

@@ -137,7 +137,23 @@ exports.sync = function(req, res, next) {
       //transfrom & load to DWH Dimension
       Models.CustomersDimension.bulkCreate(helpers.transformCustomers(
         customers));
-      console.log("Special offers Uploaded");
+      console.log("Customers Uploaded");
+    });
+
+  //extract sales territories data from sourceDb
+  sourceDb.query(
+      //selecciono solo los clientes que son personas
+      "SELECT * FROM Sales.SalesTerritory", {
+        type: sourceDb.QueryTypes.SELECT
+      })
+    .then(function(salesTerritories) {
+      console.log("found " + salesTerritories.length +
+        " sales territories records");
+      //console.log(salesTerritories);
+      //transfrom & load to DWH Dimension
+      Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSalesTerritories(
+        salesTerritories));
+      console.log("SalesTerritories Uploaded");
     });
 
   res.send("AdventureWorks Data Warehouse Model Synchronization Success!");
