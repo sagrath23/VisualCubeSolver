@@ -52,6 +52,7 @@ exports.sync = function(req, res, next) {
                       console.log("found " + currencyRates.length +
                         " currency rates records");
                       //transfrom & load to DWH Dimension
+                      console.log(Models);
                       if (typeof Models.CurrencyRatesFact !=
                         'undefined') {
                         Models.CurrencyRatesFact.bulkCreate(helpers
