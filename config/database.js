@@ -10,7 +10,9 @@ var sequelize = onHeroku ?
     protocol: 'postgres',
     dialectOptions: {
       ssl: true
-    }
+    },
+    // disable logging; default: console.log
+    logging: false
   }) :
   new Sequelize(configs.dbName, configs.dbUser, configs.dbPass, {
     host: configs.dbHost,
@@ -18,7 +20,9 @@ var sequelize = onHeroku ?
     dialect: 'postgres',
     dialectOptions: {
       ssl: true
-    }
+    },
+    // disable logging; default: console.log
+    logging: false
   });
 
 module.exports = sequelize;

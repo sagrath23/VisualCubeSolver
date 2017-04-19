@@ -69,7 +69,6 @@ exports.sync = function(req, res, next) {
         });
     });
 
-
   //extract Sales Reasons data from sourceDb
   sourceDb.query("SELECT * FROM Sales.SalesReason", {
       type: sourceDb.QueryTypes.SELECT
@@ -125,5 +124,6 @@ exports.sync = function(req, res, next) {
       console.log("Special offers Uploaded");
     });
 
-  res.send("Model created");
+
+  res.send("AdventureWorks Data Warehouse Model Synchronization Success!");
 };
