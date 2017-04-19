@@ -6,8 +6,6 @@ var helpers = require('../helpers/helperFunctions');
 
 var Models = require('../models/bootstrap');
 
-
-Models.
 exports.sync = function(req, res, next) {
   console.log("loading dimensions...");
   //extract, transform & load dates Dimension
