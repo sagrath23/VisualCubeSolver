@@ -203,7 +203,7 @@ helpers.transformSalesOrders = function(salesOrders, DatesDimension) {
     newOrders = [];
   for (var i = 0; i < salesOrders.length; i++) {
     var order = {
-      SalesOrderId: ,
+      SalesOrderId: salesOrders[i].salesorderid,
       revisionNumber: Sequelize.INTEGER,
       dateDimensionId: me.findDateDimensionId(salesOrders[i].orderdate,
         DatesDimension),
