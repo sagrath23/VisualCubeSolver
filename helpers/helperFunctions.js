@@ -113,6 +113,13 @@ helpers.transformDates = function(dates) {
     }
     newDates.push(date);
   }
+  //push null date
+  newDates.push({
+    dateDimensionId: -1,
+    dateName: 'No definido',
+    dateMin: '1970-01-01 00:00:00.000 +00:00',
+    dateMax: '2018-01-01 00:00:00.000 +00:00'
+  });
 
   return newDates;
 };
@@ -134,6 +141,8 @@ helpers.transformCurrencyRates = function(currencyRates, currenciesRanges,
   datesRanges) {
   var me = this,
     newRates = [];
+  console.log('Daaaaaaaaaaaaaaaaaaaaaaates');
+  console.log(datesRanges[0]);
   for (var i = 0; i < currencyRates.length; i++) {
     var currencyRate = {
       dateDimensionId: me.findDateDimensionId(currencyRates[i].currencyratedate,
