@@ -9,11 +9,11 @@ var Models = require('../models/bootstrap');
 
 exports.sync = function(req, res, next) {
   var productDependencies = [],
-    datesRanges = [];
-
-  var promises = [];
+    datesRanges = [],
+    promises = [],
+    currenciesRanges = [];
   console.log("loading dimensions...");
-  var currenciesRanges = [];
+
 
   //fix this shit to work with bluebird
   //extract, transform & load dates Dimension
