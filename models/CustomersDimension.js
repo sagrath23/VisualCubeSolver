@@ -13,8 +13,7 @@ var CustomersDimension = db.define('customers_dimension', {
   title: Sequelize.STRING,
   firstName: Sequelize.STRING,
   middleName: Sequelize.STRING,
-  lastName: Sequelize.STRING,
-  accountNumber: Sequelize.STRING
+  lastName: Sequelize.STRING
 });
 
 module.exports = {

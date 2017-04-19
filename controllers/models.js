@@ -128,7 +128,7 @@ exports.sync = function(req, res, next) {
   //extract customers data from sourceDb
   sourceDb.query(
       //selecciono solo los clientes que son personas
-      "SELECT cus.CustomerID, per.FirstName, per.MiddleName, per.LastName, cus.AccountNumber FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL", {
+      "SELECT cus.CustomerID, per.Title, per.FirstName, per.MiddleName, per.LastName FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL", {
         type: sourceDb.QueryTypes.SELECT
       })
     .then(function(customers) {

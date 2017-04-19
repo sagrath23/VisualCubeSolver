@@ -168,8 +168,7 @@ helpers.transformCustomers = function(customers) {
       title: customers[i].title,
       firstName: customers[i].firstname,
       middleName: customers[i].middlename,
-      lastName: customers[i].lastname,
-      accountNumber: customers[i].accountnumber
+      lastName: customers[i].lastname
     }
     newCustomers.push(customer);
   }
