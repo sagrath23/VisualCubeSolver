@@ -151,7 +151,7 @@ exports.sync = function(req, res, next) {
         " sales territories records");
       //console.log(salesTerritories);
       //transfrom & load to DWH Dimension
-      Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSalesTerritories(
+      Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(
         salesTerritories));
       console.log("SalesTerritories Uploaded");
     });
