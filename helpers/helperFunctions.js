@@ -141,8 +141,6 @@ helpers.transformCurrencyRates = function(currencyRates, currenciesRanges,
   datesRanges) {
   var me = this,
     newRates = [];
-  console.log('Daaaaaaaaaaaaaaaaaaaaaaates');
-  console.log(datesRanges[0]);
   for (var i = 0; i < currencyRates.length; i++) {
     var currencyRate = {
       dateDimensionId: me.findDateDimensionId(currencyRates[i].currencyratedate,
@@ -164,10 +162,10 @@ helpers.transformCurrencyRates = function(currencyRates, currenciesRanges,
 helpers.findDateDimensionId = function(currencyRateDate, datesRanges) {
   var rateDate = new Date(currencyRateDate);
   for (var i = 0; i < datesRanges.length; i++) {
-    var minDate = new Date(datesRanges[i].mindate),
-      maxDate = new Date(datesRanges[i].maxdate);
+    var minDate = new Date(datesRanges[i].dataValues.dateMin),
+      maxDate = new Date(datesRanges[i].dataValues.dateMax);
     if (rateDate >= minDate && rateDate <= maxDate) {
-      return datesRanges[i].dateDimensionId;
+      return datesRanges[i].dataValues.dateDimensionId;
     }
   }
   return -1;
