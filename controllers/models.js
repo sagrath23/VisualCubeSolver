@@ -126,7 +126,7 @@ exports.sync = function(req, res, next) {
 
   //extract customers data from sourceDb
   sourceDb.query(
-      "SELECT * FROM Sales.Customer cus WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NOT NULL", {
+      "SELECT * FROM Sales.Customer cus WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL", {
         type: sourceDb.QueryTypes.SELECT
       })
     .then(function(customers) {
