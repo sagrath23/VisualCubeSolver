@@ -69,7 +69,7 @@ exports.sync = function(req, res, next) {
                 });
               console.log("Currencies dimension Uploaded");
             });
-        }););
+        }));
     });
 
   //extract Sales Reasons data from sourceDb
@@ -139,7 +139,7 @@ exports.sync = function(req, res, next) {
       //console.log(customers);
       //transfrom & load to DWH Dimension
       promises.push(Models.CustomersDimension.bulkCreate(helpers.transformCustomers(
-        customers)););
+        customers)));
       console.log("Customers Uploaded");
     });
 
@@ -153,7 +153,7 @@ exports.sync = function(req, res, next) {
       //console.log(salesTerritories);
       //transfrom & load to DWH Dimension
       promises.push(Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(
-        salesTerritories)););
+        salesTerritories)));
       console.log("SalesTerritories Uploaded");
     });
 
@@ -169,7 +169,7 @@ exports.sync = function(req, res, next) {
 
       //transfrom & load to DWH Dimension
       promises.push(Models.SalesPersonsDimension.bulkCreate(helpers.transformSalePersons(
-        salesPersons)););
+        salesPersons)));
       console.log("SalesPersons Uploaded");
     });
 
@@ -183,8 +183,8 @@ exports.sync = function(req, res, next) {
         " sales orders records");
       //console.log(salesTerritories);
       //transfrom & load to DWH Dimension
-      Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(
-        salesTerritories));
+      //Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(
+      //salesTerritories));
       //console.log("SalesTerritories Uploaded");
     });
 
