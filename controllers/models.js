@@ -98,10 +98,7 @@ exports.sync = function(req, res, next) {
         " product categories records");
       //transfrom & load to DWH Dimension
       productDependencies.push(Models.ProductCategoriesDimension.bulkCreate(
-        helpers.transformProductCategories(
-          categories)).then(function() {
-        console.log("Product Categories Uploaded");
-      }));
+        helpers.transformProductCategories(categories)));
 
     });
 
