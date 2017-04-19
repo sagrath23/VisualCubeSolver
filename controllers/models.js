@@ -7,8 +7,12 @@ var helpers = require('../helpers/helperFunctions');
 var Models = require('../models/bootstrap');
 
 exports.sync = function(req, res, next) {
+
+  var promises = [];
   console.log("loading dimensions...");
   var currenciesRanges = [];
+
+
   //extract, transform & load dates Dimension
   sourceDb.query(
       "SELECT MIN(cr.currencyratedate) AS mindate, MAX(cr.currencyratedate) AS maxdate, CONCAT(EXTRACT(YEAR FROM cr.currencyratedate),EXTRACT(MONTH FROM cr.currencyratedate)) AS datename FROM Sales.CurrencyRate cr GROUP BY datename ORDER BY mindate ASC", {
@@ -17,7 +21,8 @@ exports.sync = function(req, res, next) {
     .then(function(dates) {
       console.log("found " + dates.length + " dates records...");
       //transfrom & load to DWH Dimension
-      Models.DatesDimension.bulkCreate(helpers.transformDates(dates))
+      promises.push(Models.DatesDimension.bulkCreate(helpers.transformDates(
+          dates))
         .then(function() {
           //get dimension to sync with all the data
           return Models.DatesDimension.findAll();
@@ -64,7 +69,7 @@ exports.sync = function(req, res, next) {
                 });
               console.log("Currencies dimension Uploaded");
             });
-        });
+        }););
     });
 
   //extract Sales Reasons data from sourceDb
@@ -104,8 +109,8 @@ exports.sync = function(req, res, next) {
     .then(function(products) {
       console.log("found " + products.length + " products records");
       //transfrom & load to DWH Dimension
-      Models.ProductsDimension.bulkCreate(helpers.transformProducts(
-        products));
+      promises.push(Models.ProductsDimension.bulkCreate(helpers.transformProducts(
+        products)););
       console.log("Products Uploaded");
     });
 
@@ -133,8 +138,8 @@ exports.sync = function(req, res, next) {
       console.log("found " + customers.length + " customers records");
       //console.log(customers);
       //transfrom & load to DWH Dimension
-      Models.CustomersDimension.bulkCreate(helpers.transformCustomers(
-        customers));
+      promises.push(Models.CustomersDimension.bulkCreate(helpers.transformCustomers(
+        customers)););
       console.log("Customers Uploaded");
     });
 
@@ -147,8 +152,8 @@ exports.sync = function(req, res, next) {
         " sales territories records");
       //console.log(salesTerritories);
       //transfrom & load to DWH Dimension
-      Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(
-        salesTerritories));
+      promises.push(Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(
+        salesTerritories)););
       console.log("SalesTerritories Uploaded");
     });
 
@@ -163,8 +168,8 @@ exports.sync = function(req, res, next) {
         " sales persons records");
 
       //transfrom & load to DWH Dimension
-      Models.SalesPersonsDimension.bulkCreate(helpers.transformSalePersons(
-        salesPersons));
+      promises.push(Models.SalesPersonsDimension.bulkCreate(helpers.transformSalePersons(
+        salesPersons)););
       console.log("SalesPersons Uploaded");
     });
 
@@ -178,9 +183,14 @@ exports.sync = function(req, res, next) {
         " sales orders records");
       //console.log(salesTerritories);
       //transfrom & load to DWH Dimension
-      //Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(salesTerritories));
+      Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(
+        salesTerritories));
       //console.log("SalesTerritories Uploaded");
     });
+
+  Promise.all(promises).then(function() {
+    console.log('all promises are answered!!! Yeah madafacas');
+  });
 
   res.send("AdventureWorks Data Warehouse Model Synchronization Success!");
 };
