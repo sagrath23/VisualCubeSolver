@@ -4,9 +4,9 @@ var Sequelize = require('sequelize');
 
 var helpers = {};
 
-helpers.transformSalesReasons = function(reasons){
+helpers.transformSalesReasons = function(reasons) {
   var newReasons = [];
-  for(var i=0; i < reasons.length; i++){
+  for (var i = 0; i < reasons.length; i++) {
     var reason = {
       salesReasonId: reasons[i].salesreasonid,
       name: reasons[i].name,
@@ -24,9 +24,9 @@ helpers.transformSalesReasons = function(reasons){
   return newReasons;
 };
 
-helpers.transformProductCategories = function(categories){
+helpers.transformProductCategories = function(categories) {
   var newCategories = [];
-  for(var i=0; i < categories.length; i++){
+  for (var i = 0; i < categories.length; i++) {
     var category = {
       ProductSubcategoryId: categories[i].productsubcategoryid,
       ProductCategoryId: categories[i].productcategoryid,
@@ -46,9 +46,9 @@ helpers.transformProductCategories = function(categories){
   return newCategories;
 };
 
-helpers.transformProducts = function(products){
+helpers.transformProducts = function(products) {
   var newProducts = [];
-  for(var i=0; i < products.length; i++){
+  for (var i = 0; i < products.length; i++) {
     var product = {
       ProductId: products[i].productid,
       name: products[i].name,
@@ -64,9 +64,9 @@ helpers.transformProducts = function(products){
   return newProducts;
 };
 
-helpers.transformSpecialOffers = function(specialOffers){
+helpers.transformSpecialOffers = function(specialOffers) {
   var newSpecialOffers = [];
-  for(var i=0; i < specialOffers.length; i++){
+  for (var i = 0; i < specialOffers.length; i++) {
     var offer = {
       SpecialOfferID: specialOffers[i].specialofferid,
       description: specialOffers[i].description,
@@ -84,9 +84,9 @@ helpers.transformSpecialOffers = function(specialOffers){
   return newSpecialOffers;
 };
 
-helpers.transformSaleTerritories = function(saleTerritories){
+helpers.transformSaleTerritories = function(saleTerritories) {
   var newTerritories = [];
-  for(var i=0; i < saleTerritories.length; i++){
+  for (var i = 0; i < saleTerritories.length; i++) {
     var offer = {
       SalesTerritoryId: saleTerritories[i].territoryid,
       name: saleTerritories[i].name,
@@ -103,9 +103,9 @@ helpers.transformSaleTerritories = function(saleTerritories){
   return newTerritories;
 };
 
-helpers.transformDates = function(dates){
+helpers.transformDates = function(dates) {
   var newDates = [];
-  for(var i = 0; i < dates.length; i++){
+  for (var i = 0; i < dates.length; i++) {
     var date = {
       dateName: dates[i].datename,
       dateMin: dates[i].mindate,
@@ -117,9 +117,9 @@ helpers.transformDates = function(dates){
   return newDates;
 };
 
-helpers.transformCurrencies = function(currencies){
+helpers.transformCurrencies = function(currencies) {
   var newCurrencies = [];
-  for(var i = 0; i < currencies.length; i++){
+  for (var i = 0; i < currencies.length; i++) {
     var currency = {
       currencyCode: currencies[i].currencycode,
       name: currencies[i].name
@@ -130,41 +130,45 @@ helpers.transformCurrencies = function(currencies){
   return newCurrencies;
 };
 
-helpers.transformCurrencyRates = function(currencyRates,currenciesRanges,datesRanges){
+helpers.transformCurrencyRates = function(currencyRates, currenciesRanges,
+  datesRanges) {
   var me = this,
-      newRates = [];
-  for(var i = 0; i < currencyRates.length; i++){
+    newRates = [];
+  for (var i = 0; i < currencyRates.length; i++) {
     var currencyRate = {
-      dateDimensionId: me.findDateDimensionId(currencyRates[i].currencyratedate,datesRanges),
+      dateDimensionId: me.findDateDimensionId(currencyRates[i].currencyratedate,
+        datesRanges),
       currencyRateDate: currencyRates[i].currencyratedate,
-      fromCurrencyCode: me.findCurrencyDimensionId(currencyRates[i].fromcurrencycode,currenciesRanges),
-      toCurrencyCode: me.findCurrencyDimensionId(currencyRates[i].tocurrencycode,currenciesRanges),
+      fromCurrencyCode: me.findCurrencyDimensionId(currencyRates[i].fromcurrencycode,
+        currenciesRanges),
+      toCurrencyCode: me.findCurrencyDimensionId(currencyRates[i].tocurrencycode,
+        currenciesRanges),
       averrageRate: currencyRates[i].averagerate,
       endOfDayRate: currencyRates[i].endofdayrate
     }
-    newRates.push(currency);
+    newRates.push(currencyRate);
   }
 
   return newRates;
 };
 
-helpers.findDateDimensionId = function(currencyRateDate,datesRanges){
+helpers.findDateDimensionId = function(currencyRateDate, datesRanges) {
   var rateDate = new Date(currencyRateDate);
-  for(var i = 0; i < datesRanges.length; i++){
+  for (var i = 0; i < datesRanges.length; i++) {
     var minDate = new Date(datesRanges[i].dateMin),
-        maxDate = new Date(datesRanges[i].dateMax);
-    if(rateDate >= minDate && rateDate <= maxDate){
+      maxDate = new Date(datesRanges[i].dateMax);
+    if (rateDate >= minDate && rateDate <= maxDate) {
       return datesRanges[i].dateDimensionId;
     }
   }
   return -1;
 };
 
-helpers.findCurrencyDimensionId = function(currencyCode,currenciesRanges){
-  for(var i = 0; i < currenciesRanges.length; i++){
+helpers.findCurrencyDimensionId = function(currencyCode, currenciesRanges) {
+  for (var i = 0; i < currenciesRanges.length; i++) {
     //verificar estructura
     console.log(currenciesRanges[i]);
-    if(currenciesRanges[i].currencyCode == currencyCode){
+    if (currenciesRanges[i].currencyCode == currencyCode) {
       return currenciesRanges[i].currencyId;
     }
   }
