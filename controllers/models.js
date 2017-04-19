@@ -9,6 +9,8 @@ var Models = require('../models/bootstrap');
 
 exports.sync = function(req, res, next) {
 
+  var productDependencies = [];
+
   var promises = [];
   console.log("loading dimensions...");
   var currenciesRanges = [];
@@ -95,25 +97,30 @@ exports.sync = function(req, res, next) {
       console.log("found " + categories.length +
         " product categories records");
       //transfrom & load to DWH Dimension
-      Models.ProductCategoriesDimension.bulkCreate(helpers.transformProductCategories(
-        categories)).then(function() {
+      productDependencies.push(Models.ProductCategoriesDimension.bulkCreate(
+        helpers.transformProductCategories(
+          categories)).then(function() {
         console.log("Product Categories Uploaded");
+      }));
+
+    });
+
+  //validate dependency of products
+  Promise.all(productDependencies).then(function() {
+    console.log("Loaded product dimension dependencies");
+    //extract products data from sourceDb
+    sourceDb.query(
+        "SELECT pr.ProductID, pr.Name, pr.MakeFlag, pr.FinishedGoodsFlag,pr.Color,pr.StandardCost,pr.ListPrice,COALESCE(pr.ProductSubcategoryID,-1) AS ProductSubcategoryID FROM Production.Product pr ", {
+          type: sourceDb.QueryTypes.SELECT
+        })
+      .then(function(products) {
+        console.log("found " + products.length + " products records");
+        //transfrom & load to DWH Dimension
+        promises.push(Models.ProductsDimension.bulkCreate(helpers.transformProducts(
+          products)));
+        console.log("Products Uploaded");
       });
-
-    });
-
-  //extract products data from sourceDb
-  sourceDb.query(
-      "SELECT pr.ProductID, pr.Name, pr.MakeFlag, pr.FinishedGoodsFlag,pr.Color,pr.StandardCost,pr.ListPrice,COALESCE(pr.ProductSubcategoryID,-1) AS ProductSubcategoryID FROM Production.Product pr ", {
-        type: sourceDb.QueryTypes.SELECT
-      })
-    .then(function(products) {
-      console.log("found " + products.length + " products records");
-      //transfrom & load to DWH Dimension
-      promises.push(Models.ProductsDimension.bulkCreate(helpers.transformProducts(
-        products)));
-      console.log("Products Uploaded");
-    });
+  });
 
   //extract special offers data from sourceDb
   sourceDb.query(
