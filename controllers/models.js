@@ -101,6 +101,18 @@ exports.sync = function(req, res, next) {
       productDependencies.push(Models.ProductCategoriesDimension.bulkCreate(
         helpers.transformProductCategories(categories)).then(function() {
         console.log("product categories loaded");
+        //extract products data from sourceDb
+        sourceDb.query(
+            "SELECT pr.ProductID, pr.Name, pr.MakeFlag, pr.FinishedGoodsFlag,pr.Color,pr.StandardCost,pr.ListPrice,COALESCE(pr.ProductSubcategoryID,-1) AS ProductSubcategoryID FROM Production.Product pr ", {
+              type: sourceDb.QueryTypes.SELECT
+            })
+          .then(function(products) {
+            console.log("found " + products.length + " products records");
+            //transfrom & load to DWH Dimension
+            promises.push(Models.ProductsDimension.bulkCreate(helpers.transformProducts(
+              products)));
+            console.log("Products Uploaded");
+          });
       }));
 
     });
