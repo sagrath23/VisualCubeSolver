@@ -161,7 +161,7 @@ exports.sync = function(req, res, next) {
         type: sourceDb.QueryTypes.SELECT
       })
     .then(function(salesPersons) {
-      console.log("found " + salesTerritories.length +
+      console.log("found " + salesPersons.length +
         " sales persons records");
       //console.log(salesTerritories);
       //transfrom & load to DWH Dimension
