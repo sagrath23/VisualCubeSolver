@@ -110,7 +110,7 @@ exports.sync = function(req, res, next) {
       console.log("found " + products.length + " products records");
       //transfrom & load to DWH Dimension
       promises.push(Models.ProductsDimension.bulkCreate(helpers.transformProducts(
-        products)););
+        products)));
       console.log("Products Uploaded");
     });
 
