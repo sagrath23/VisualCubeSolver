@@ -1,6 +1,45 @@
+//datawharehouse connection
+var db = require('../config/database');
+//source relational database connection
+var sourceDb = require('../config/oltpdatabase');
+//ORM
+var Sequelize = require('sequelize');
+//Promise Manager
+var Promise = require('bluebird');
+
+//transform functions
+var helpers = require('../helpers/helperFunctions');
+//datawharehouse dimensions & facts
+var Models = require('../models/bootstrap');
+
+exports.sync = function(req, res, next) {
+  console.log("loading dimensions");
+
+  var currenciesAndDatesData = [],
+      currencyRatesDependencies = [];
+
+  //get dates data
+  currenciesAndDatesData.push(sourceDb.query("SELECT MIN(cr.currencyratedate) AS mindate, MAX(cr.currencyratedate) AS maxdate, CONCAT(EXTRACT(YEAR FROM cr.currencyratedate),EXTRACT(MONTH FROM cr.currencyratedate)) AS datename FROM Sales.CurrencyRate cr GROUP BY datename ORDER BY mindate ASC", { type: sourceDb.QueryTypes.SELECT }));
+
+  //and get currencies data
+  currenciesAndDatesData.push(sourceDb.query("SELECT cur.currencycode,cur.name FROM Sales.Currency cur", { type: sourceDb.QueryTypes.SELECT }));
+
+  //and wait for responses
+  Promise.all(currenciesAndDatesData).then(function(responses){
+    console.log("Dates & Currencies data loaded");
+    console.log(responses);
+    //
+  });
+
+  
+  res.send("AdventureWorks Data Warehouse Model Synchronization Success!");
+};
+
+/*
 var db = require('../config/database');
 var sourceDb = require('../config/oltpdatabase');
 var Sequelize = require('sequelize');
+
 
 var helpers = require('../helpers/helperFunctions');
 
@@ -87,7 +126,7 @@ exports.sync = function(req, res, next) {
         console.log("Sales Reasons Dimension Uploaded");
       });
     });
-  
+
   //extract ShipMethods data from sourceDb
   sourceDb.query("SELECT * FROM Purchasing.ShipMethod", {
       type: sourceDb.QueryTypes.SELECT
@@ -95,7 +134,8 @@ exports.sync = function(req, res, next) {
     .then(function(shipMethods) {
       console.log("found " + shipMethods.length + " shipMethiodsrecords");
       //transfrom & load to DWH Dimension
-      Models.ShipMethodsDimension.bulkCreate(helpers.transformShipMethods(shipMethods)).then(function() {
+      Models.ShipMethodsDimension.bulkCreate(helpers.transformShipMethods(
+        shipMethods)).then(function() {
         console.log("Sales Reasons Dimension Uploaded");
       });
     });
@@ -106,24 +146,28 @@ exports.sync = function(req, res, next) {
         type: sourceDb.QueryTypes.SELECT
       })
     .then(function(categories) {
-      console.log("found " + categories.length +" product categories records");
+      console.log("found " + categories.length +
+        " product categories records");
       //transfrom & load to DWH Dimension
-      Models.ProductCategoriesDimension.bulkCreate(helpers.transformProductCategories(categories))
+      Models.ProductCategoriesDimension.bulkCreate(helpers.transformProductCategories(
+          categories))
         .then(function() {
           console.log("product categories loaded");
           //extract products data from sourceDb
           sourceDb.query(
-            "SELECT pr.ProductID, pr.Name, pr.MakeFlag, pr.FinishedGoodsFlag,pr.Color,pr.StandardCost,pr.ListPrice,COALESCE(pr.ProductSubcategoryID,-1) AS ProductSubcategoryID FROM Production.Product pr ", {
-              type: sourceDb.QueryTypes.SELECT
-            })
-          .then(function(products) {
-            console.log("found " + products.length + " products records");
-            //transfrom & load to DWH Dimension
-            promises.push(Models.ProductsDimension.bulkCreate(helpers.transformProducts(
-              products)));
-            console.log("Products Uploaded");
-          });
-      });
+              "SELECT pr.ProductID, pr.Name, pr.MakeFlag, pr.FinishedGoodsFlag,pr.Color,pr.StandardCost,pr.ListPrice,COALESCE(pr.ProductSubcategoryID,-1) AS ProductSubcategoryID FROM Production.Product pr ", {
+                type: sourceDb.QueryTypes.SELECT
+              })
+            .then(function(products) {
+              console.log("found " + products.length +
+                " products records");
+              //transfrom & load to DWH Dimension
+              promises.push(Models.ProductsDimension.bulkCreate(helpers
+                .transformProducts(
+                  products)));
+              console.log("Products Uploaded");
+            });
+        });
     });
 
   //extract special offers data from sourceDb
@@ -150,17 +194,22 @@ exports.sync = function(req, res, next) {
       console.log("found " + customers.length + " customers records");
       //console.log(customers);
       //transfrom & load to DWH Dimension
-      Models.CustomersDimension.bulkCreate(helpers.transformCustomers(customers))
-        .then(function(){
-          sourceDb.query("SELECT so.SalesOrderID, so.RevisionNumber, so.OrderDate, so.dueDate, so.ShipDate, so.Status, so.OnlineOrderFlag, so.PurchaseOrderNumber, so.AccountNumber, so.CustomerID, so.SalesPersonID, so.TerritoryID, so.ShipMethodID, so.TaxAmt, so.Freight, so.TotalDue, so.Comment FROM Sales.SalesOrderHeader so WHERE so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL)", 
-                         { type: sourceDb.QueryTypes.SELECT})
-            .then(function(salesOrders) { 
-          console.log("found " + salesOrders.length +" sales orders records");
-          //transfrom & load to DWH Dimension
-          Models.SalesOrdersFact.bulkCreate(helpers.transformSalesOrders(salesOrders, datesRanges));
-          console.log("Sales orders Uploaded");
+      Models.CustomersDimension.bulkCreate(helpers.transformCustomers(
+          customers))
+        .then(function() {
+          sourceDb.query(
+              "SELECT so.SalesOrderID, so.RevisionNumber, so.OrderDate, so.dueDate, so.ShipDate, so.Status, so.OnlineOrderFlag, so.PurchaseOrderNumber, so.AccountNumber, so.CustomerID, so.SalesPersonID, so.TerritoryID, so.ShipMethodID, so.TaxAmt, so.Freight, so.TotalDue, so.Comment FROM Sales.SalesOrderHeader so WHERE so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL)", {
+                type: sourceDb.QueryTypes.SELECT
+              })
+            .then(function(salesOrders) {
+              console.log("found " + salesOrders.length +
+                " sales orders records");
+              //transfrom & load to DWH Dimension
+              Models.SalesOrdersFact.bulkCreate(helpers.transformSalesOrders(
+                salesOrders, datesRanges));
+              console.log("Sales orders Uploaded");
+            });
         });
-      });
       console.log("Customers Uploaded");
     });
 
@@ -173,20 +222,24 @@ exports.sync = function(req, res, next) {
         " sales territories records");
       //console.log(salesTerritories);
       //transfrom & load to DWH Dimension
-      Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(salesTerritories));
+      Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(
+        salesTerritories));
       console.log("SalesTerritories Uploaded");
     });
 
   //extract sales persons data from sourceDb
-  sourceDb.query("SELECT sp.BusinessEntityID, per.Title, per.FirstName, per.MiddleName, per.LastName, sp.SalesQuota, sp.Bonus, sp.CommissionPct, sp.SalesYTD, sp.SalesLastYear FROM Sales.SalesPerson sp INNER JOIN Person.Person per ON per.BusinessEntityID = sp.BusinessEntityID", {
+  sourceDb.query(
+      "SELECT sp.BusinessEntityID, per.Title, per.FirstName, per.MiddleName, per.LastName, sp.SalesQuota, sp.Bonus, sp.CommissionPct, sp.SalesYTD, sp.SalesLastYear FROM Sales.SalesPerson sp INNER JOIN Person.Person per ON per.BusinessEntityID = sp.BusinessEntityID", {
         type: sourceDb.QueryTypes.SELECT
       })
     .then(function(salesPersons) {
-      console.log("found " + salesPersons.length +" sales persons records");
+      console.log("found " + salesPersons.length + " sales persons records");
 
       //transfrom & load to DWH Dimension
-      Models.SalesPersonsDimension.bulkCreate(helpers.transformSalePersons(salesPersons));
+      Models.SalesPersonsDimension.bulkCreate(helpers.transformSalePersons(
+        salesPersons));
       console.log("SalesPersons Uploaded");
     });
   res.send("AdventureWorks Data Warehouse Model Synchronization Success!");
 };
+*/
