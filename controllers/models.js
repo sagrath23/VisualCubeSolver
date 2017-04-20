@@ -117,23 +117,6 @@ exports.sync = function(req, res, next) {
 
     });
 
-  //validate dependency of products
-  Promise.all(productDependencies).then(function() {
-    console.log("Init load product dimension dependencies madafacas");
-    //extract products data from sourceDb
-    sourceDb.query(
-        "SELECT pr.ProductID, pr.Name, pr.MakeFlag, pr.FinishedGoodsFlag,pr.Color,pr.StandardCost,pr.ListPrice,COALESCE(pr.ProductSubcategoryID,-1) AS ProductSubcategoryID FROM Production.Product pr ", {
-          type: sourceDb.QueryTypes.SELECT
-        })
-      .then(function(products) {
-        console.log("found " + products.length + " products records");
-        //transfrom & load to DWH Dimension
-        promises.push(Models.ProductsDimension.bulkCreate(helpers.transformProducts(
-          products)));
-        console.log("Products Uploaded");
-      });
-  });
-
   //extract special offers data from sourceDb
   sourceDb.query(
       "SELECT so.SpecialOfferID, so.Description, so.DiscountPct, so.Type, so.Category, so.StartDate, so.EndDate, so.MinQty, so.MaxQty FROM Sales.SpecialOffer so", {
@@ -159,7 +142,16 @@ exports.sync = function(req, res, next) {
       //console.log(customers);
       //transfrom & load to DWH Dimension
       promises.push(Models.CustomersDimension.bulkCreate(helpers.transformCustomers(
-        customers)));
+        customers)).then(function(){
+        sourceDb.query("SELECT * FROM Sales.SalesOrderHeader", {
+          type: sourceDb.QueryTypes.SELECT
+        }).then(function(salesOrders) {
+          console.log("found " + salesOrders.length +" sales orders records");
+          //transfrom & load to DWH Dimension
+          Models.SalesOrdersFact.bulkCreate(helpers.transformSalesOrders(salesOrders, datesRanges));
+          console.log("Sales orders Uploaded");
+        });
+      }));
       console.log("Customers Uploaded");
     });
 
@@ -192,27 +184,6 @@ exports.sync = function(req, res, next) {
         salesPersons)));
       console.log("SalesPersons Uploaded");
     });
-
-  //the good stuff starts here
-
-
-  Promise.all(promises).then(function() {
-
-    //extract SalesOrders data from sourceDb
-    sourceDb.query("SELECT * FROM Sales.SalesOrderHeader", {
-        type: sourceDb.QueryTypes.SELECT
-      })
-      .then(function(salesOrders) {
-        console.log("found " + salesOrders.length +
-          " sales orders records");
-        //console.log(salesTerritories);
-        //transfrom & load to DWH Dimension
-        Models.SalesOrdersFact.bulkCreate(helpers.transformSalesOrders(
-          salesOrders, datesRanges));
-        console.log("Sales orders Uploaded");
-      });
-  });
-
   res.send(
     "AdventureWorks Data Warehouse Model Synchronization Success!");
 };
