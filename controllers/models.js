@@ -50,7 +50,7 @@ exports.sync = function(req, res, next) {
             console.log(dwhResponses[0][0]);
             console.log("---------------1,0");
             console.log(dwhResponses[1][0]);
-            Models.CurrencyRatesFact.bulkCreate(helpers.transformCurrencyRates(currencyRates, dwhResponses[0], dwhResponses[1])).then(function(){ console.log("currency rates facts loaded.");});
+            Models.CurrencyRatesFact.bulkCreate(helpers.transformCurrencyRates(currencyRates, dwhResponses[1], dwhResponses[0])).then(function(){ console.log("currency rates facts loaded.");});
           });
       });
   });

@@ -138,19 +138,15 @@ helpers.transformCurrencies = function(currencies) {
   return newCurrencies;
 };
 
-helpers.transformCurrencyRates = function(currencyRates, currenciesRanges,
-  datesRanges) {
+helpers.transformCurrencyRates = function(currencyRates, currenciesRanges,  datesRanges) {
   var me = this,
     newRates = [];
   for (var i = 0; i < currencyRates.length; i++) {
     var currencyRate = {
-      dateDimensionId: me.findDateDimensionId(currencyRates[i].currencyratedate,
-        datesRanges),
+      dateDimensionId: me.findDateDimensionId(currencyRates[i].currencyratedate, datesRanges),
       currencyRateDate: currencyRates[i].currencyratedate,
-      fromCurrencyCode: me.findCurrencyDimensionId(currencyRates[i].fromcurrencycode,
-        currenciesRanges),
-      toCurrencyCode: me.findCurrencyDimensionId(currencyRates[i].tocurrencycode,
-        currenciesRanges),
+      fromCurrencyCode: me.findCurrencyDimensionId(currencyRates[i].fromcurrencycode, currenciesRanges),
+      toCurrencyCode: me.findCurrencyDimensionId(currencyRates[i].tocurrencycode, currenciesRanges),
       averrageRate: currencyRates[i].averagerate,
       endOfDayRate: currencyRates[i].endofdayrate
     }
