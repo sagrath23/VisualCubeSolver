@@ -176,6 +176,22 @@ helpers.transformCustomers = function(customers) {
   return newCustomers;
 };
 
+helpers.transformShipMethods = function(shipMethods) {
+  var me = this,
+    newShipMethods = [];
+  for (var i = 0; i < shipMethods.length; i++) {
+    var shipMethod = {
+      shipMethodId: shipMethods[i].shipmethodid,
+      name: shipMethods[i].name,
+      shipBase: shipMethods[i].shipbase,
+      shipRate: shipMethods[i].shiprate
+    }
+
+    newShipMethods.push(shipMethod);
+  }
+  return newShipMethods;
+};
+
 helpers.transformSalePersons = function(salesPersons) {
   var me = this,
     newPersons = [];
