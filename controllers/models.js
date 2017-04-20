@@ -87,6 +87,18 @@ exports.sync = function(req, res, next) {
         console.log("Sales Reasons Dimension Uploaded");
       });
     });
+  
+  //extract ShipMethods data from sourceDb
+  sourceDb.query("SELECT * FROM Purchasing.ShipMethod", {
+      type: sourceDb.QueryTypes.SELECT
+    })
+    .then(function(shipMethods) {
+      console.log("found " + shipMethods.length + " shipMethiodsrecords");
+      //transfrom & load to DWH Dimension
+      Models.ShipMethodsDimension.bulkCreate(helpers.transformShipMethods(shipMethods)).then(function() {
+        console.log("Sales Reasons Dimension Uploaded");
+      });
+    });
 
   //extract product categories & subcategories data from sourceDb
   sourceDb.query(
