@@ -218,7 +218,6 @@ helpers.transformSalesOrders = function(salesOrders, DatesDimension) {
       salePersonId: salesOrders[i].salepersonid,
       territoryId: salesOrders[i].territoryid,
       shipMethodId: salesOrders[i].shipmethodid,
-      currencyId: salesOrders[i].orderdate, //revisar
       taxAmount: salesOrders[i].taxamt,
       freight: salesOrders[i].freight,
       totalDue: salesOrders[i].totaldue,
