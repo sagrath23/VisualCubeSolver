@@ -1,7 +1,6 @@
 var db = require('../config/database');
 var sourceDb = require('../config/oltpdatabase');
 var Sequelize = require('sequelize');
-var Promise = require("bluebird");
 
 var helpers = require('../helpers/helperFunctions');
 
@@ -24,7 +23,7 @@ exports.sync = function(req, res, next) {
     .then(function(dates) {
       console.log("found " + dates.length + " dates records...");
       //transfrom & load to DWH Dimension
-      promises.push(Models.DatesDimension.bulkCreate(helpers.transformDates(
+      Models.DatesDimension.bulkCreate(helpers.transformDates(
           dates))
         .then(function() {
           //get dimension to sync with all the data
@@ -73,7 +72,7 @@ exports.sync = function(req, res, next) {
                 });
               console.log("Currencies dimension Uploaded");
             });
-        }));
+        });
     });
 
   //extract Sales Reasons data from sourceDb
@@ -95,14 +94,13 @@ exports.sync = function(req, res, next) {
         type: sourceDb.QueryTypes.SELECT
       })
     .then(function(categories) {
-      console.log("found " + categories.length +
-        " product categories records");
+      console.log("found " + categories.length +" product categories records");
       //transfrom & load to DWH Dimension
-      productDependencies.push(Models.ProductCategoriesDimension.bulkCreate(
-        helpers.transformProductCategories(categories)).then(function() {
-        console.log("product categories loaded");
-        //extract products data from sourceDb
-        sourceDb.query(
+      Models.ProductCategoriesDimension.bulkCreate(helpers.transformProductCategories(categories))
+        .then(function() {
+          console.log("product categories loaded");
+          //extract products data from sourceDb
+          sourceDb.query(
             "SELECT pr.ProductID, pr.Name, pr.MakeFlag, pr.FinishedGoodsFlag,pr.Color,pr.StandardCost,pr.ListPrice,COALESCE(pr.ProductSubcategoryID,-1) AS ProductSubcategoryID FROM Production.Product pr ", {
               type: sourceDb.QueryTypes.SELECT
             })
@@ -113,8 +111,7 @@ exports.sync = function(req, res, next) {
               products)));
             console.log("Products Uploaded");
           });
-      }));
-
+      });
     });
 
   //extract special offers data from sourceDb
@@ -141,17 +138,16 @@ exports.sync = function(req, res, next) {
       console.log("found " + customers.length + " customers records");
       //console.log(customers);
       //transfrom & load to DWH Dimension
-      promises.push(Models.CustomersDimension.bulkCreate(helpers.transformCustomers(
-        customers)).then(function(){
-        sourceDb.query("SELECT * FROM Sales.SalesOrderHeader", {
-          type: sourceDb.QueryTypes.SELECT
-        }).then(function(salesOrders) {
+      Models.CustomersDimension.bulkCreate(helpers.transformCustomers(customers))
+        .then(function(){
+          sourceDb.query("SELECT * FROM Sales.SalesOrderHeader", { type: sourceDb.QueryTypes.SELECT})
+            .then(function(salesOrders) {
           console.log("found " + salesOrders.length +" sales orders records");
           //transfrom & load to DWH Dimension
           Models.SalesOrdersFact.bulkCreate(helpers.transformSalesOrders(salesOrders, datesRanges));
           console.log("Sales orders Uploaded");
         });
-      }));
+      });
       console.log("Customers Uploaded");
     });
 
@@ -164,15 +160,12 @@ exports.sync = function(req, res, next) {
         " sales territories records");
       //console.log(salesTerritories);
       //transfrom & load to DWH Dimension
-      promises.push(Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(
-        salesTerritories)));
+      Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(salesTerritories));
       console.log("SalesTerritories Uploaded");
     });
 
   //extract sales persons data from sourceDb
-  sourceDb.query(
-      //selecciono solo los clientes que son personas
-      "SELECT sp.BusinessEntityID, per.Title, per.FirstName, per.MiddleName, per.LastName, sp.SalesQuota, sp.Bonus, sp.CommissionPct, sp.SalesYTD, sp.SalesLastYear FROM Sales.SalesPerson sp INNER JOIN Person.Person per ON per.BusinessEntityID = sp.BusinessEntityID", {
+  sourceDb.query("SELECT sp.BusinessEntityID, per.Title, per.FirstName, per.MiddleName, per.LastName, sp.SalesQuota, sp.Bonus, sp.CommissionPct, sp.SalesYTD, sp.SalesLastYear FROM Sales.SalesPerson sp INNER JOIN Person.Person per ON per.BusinessEntityID = sp.BusinessEntityID", {
         type: sourceDb.QueryTypes.SELECT
       })
     .then(function(salesPersons) {
@@ -180,10 +173,8 @@ exports.sync = function(req, res, next) {
         " sales persons records");
 
       //transfrom & load to DWH Dimension
-      promises.push(Models.SalesPersonsDimension.bulkCreate(helpers.transformSalePersons(
-        salesPersons)));
+      Models.SalesPersonsDimension.bulkCreate(helpers.transformSalePersons(salesPersons));
       console.log("SalesPersons Uploaded");
     });
-  res.send(
-    "AdventureWorks Data Warehouse Model Synchronization Success!");
+  res.send("AdventureWorks Data Warehouse Model Synchronization Success!");
 };
