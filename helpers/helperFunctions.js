@@ -128,6 +128,7 @@ helpers.transformCurrencies = function(currencies) {
   var newCurrencies = [];
   for (var i = 0; i < currencies.length; i++) {
     var currency = {
+      currencyId: currencies[i].currencyid,
       currencyCode: currencies[i].currencycode,
       name: currencies[i].name
     }
