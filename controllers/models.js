@@ -142,8 +142,7 @@ exports.sync = function(req, res, next) {
         .then(function(){
           sourceDb.query("SELECT so.SalesOrderID, so.RevisionNumber, so.OrderDate, so.dueDate, so.ShipDate, so.Status, so.OnlineOrderFlag, so.PurchaseOrderNumber, so.AccountNumber, so.CustomerID, so.SalesPersonID, so.TerritoryID, so.ShipMethodID, so.TaxAmt, so.Freight, so.TotalDue, so.Comment FROM Sales.SalesOrderHeader so", 
                          { type: sourceDb.QueryTypes.SELECT})
-            .then(function(salesOrders) {
-          console.log(salesOrders[0]);  
+            .then(function(salesOrders) { 
           console.log("found " + salesOrders.length +" sales orders records");
           //transfrom & load to DWH Dimension
           Models.SalesOrdersFact.bulkCreate(helpers.transformSalesOrders(salesOrders, datesRanges));
