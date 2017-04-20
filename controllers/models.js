@@ -45,11 +45,6 @@ exports.sync = function(req, res, next) {
         sourceDb.query("SELECT * FROM Sales.CurrencyRate", {type: sourceDb.QueryTypes.SELECT}).then(
           function(currencyRates) {
             //transfrom & load to DWH Dimension
-            //why don't insert currency rate data
-            console.log("---------------0,0");
-            console.log(dwhResponses[0][0]);
-            console.log("---------------1,0");
-            console.log(dwhResponses[1][0]);
             Models.CurrencyRatesFact.bulkCreate(helpers.transformCurrencyRates(currencyRates, dwhResponses[1], dwhResponses[0])).then(function(){ console.log("currency rates facts loaded.");});
           });
       });
