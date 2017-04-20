@@ -33,14 +33,14 @@ exports.sync = function(req, res, next) {
     currencyRatesDependencies.push(Models.CurrenciesDimension.bulkCreate(helpers.transformCurrencies(responses[1])).then(function() { return Models.CurrenciesDimension.findAll();}));    
     
     //and sync responses
-    Promise.all(currencyRatesDependencies).then(function(dwhResponses){
-      console.log("Dates & currencies data transform and loaded into datawharehouse");
-      //now, we load currency rates facts in the datawharehouse
-      sourceDb.query("SELECT * FROM Sales.CurrencyRate", {type: sourceDb.QueryTypes.SELECT}).then(
-        function(currencyRates) {
-          //transfrom & load to DWH Dimension
-          Models.CurrencyRatesFact.bulkCreate(helpers.transformCurrencyRates(currencyRates, dwhResponses[0], dwhResponses[1])).then(function(){
-            console.log("currency rates facts loaded.");
+    Promise.all(currencyRatesDependencies).then(
+      function(dwhResponses){
+        console.log("Dates & currencies data transform and loaded into datawharehouse");
+        //now, we load currency rates facts in the datawharehouse
+        sourceDb.query("SELECT * FROM Sales.CurrencyRate", {type: sourceDb.QueryTypes.SELECT}).then(
+          function(currencyRates) {
+            //transfrom & load to DWH Dimension
+            Models.CurrencyRatesFact.bulkCreate(helpers.transformCurrencyRates(currencyRates, dwhResponses[0], dwhResponses[1])).then(function(){ console.log("currency rates facts loaded.");});
           });
       });
   });
