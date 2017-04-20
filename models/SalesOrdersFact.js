@@ -64,14 +64,6 @@ var SalesOrdersFact = db.define('sales_orders_fact', {
       deferrable: Sequelize.Deferrable.NOT
     }
   },
-  currencyId: {
-    type: Sequelize.INTEGER,
-    references: {
-      model: CurrenciesDimension,
-      key: 'currencyId',
-      deferrable: Sequelize.Deferrable.NOT
-    }
-  },
   taxAmount: Sequelize.DOUBLE,
   freight: Sequelize.DOUBLE,
   totalDue: Sequelize.DOUBLE,
