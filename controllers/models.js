@@ -28,7 +28,7 @@ exports.sync = function(req, res, next) {
   Promise.all(currenciesAndDatesData).then(function(responses){
     console.log("Dates & Currencies data loaded");
     //when the results arrive, we pass it to the data wharehouse
-    currencyRatesDependencies.push(Models.DatesDimension.bulkCreate(helpers.transformDates(responses[0])).then(function(){ return DatesDimension.findAll();}));
+    currencyRatesDependencies.push(Models.DatesDimension.bulkCreate(helpers.transformDates(responses[0])).then(function(){ return Models.DatesDimension.findAll();}));
 
     currencyRatesDependencies.push(Models.CurrenciesDimension.bulkCreate(helpers.transformCurrencies(responses[1])).then(function() { return Models.CurrenciesDimension.findAll();}));    
     
