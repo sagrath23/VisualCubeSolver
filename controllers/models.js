@@ -156,7 +156,9 @@ exports.sync = function(req, res, next) {
           sourceDb.query("SELECT sod.* FROM Sales.SalesOrderDetail sod INNER JOIN Sales.SalesOrderHeader so ON so.SalesOrderID = sod.SalesOrderID WHERE so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL) ", { type: sourceDb.QueryTypes.SELECT })
             .then(function(details){
               console.log("details founded: "+details.length+"");
-              Models.SalesOrderDetailsFact.bulkCreate(helpers.transformSaleOrderDetails(details));
+              Models.SalesOrderDetailsFact.bulkCreate(helpers.transformSaleOrderDetails(details)).then(function(){
+                console.log('details loaded');
+              });
             });
         });
       });  
