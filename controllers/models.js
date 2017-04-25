@@ -85,7 +85,7 @@ exports.sync = function(req, res, next) {
       console.log("Categories & subcategories transform and loaded");
 
       //extract products data from sourceDb
-      salesOrderDetailsDependency.push(sourceDb.query("SELECT pr.ProductID, pr.Name, pr.MakeFlag, pr.FinishedGoodsFlag,pr.Color,pr.StandardCost,pr.ListPrice,COALESCE(pr.ProductSubcategoryID,-1) AS ProductSubcategoryID FROM Production.Product pr ", { type: sourceDb.QueryTypes.SELECT })
+      salesOrdersDependencies.push(sourceDb.query("SELECT pr.ProductID, pr.Name, pr.MakeFlag, pr.FinishedGoodsFlag,pr.Color,pr.StandardCost,pr.ListPrice,COALESCE(pr.ProductSubcategoryID,-1) AS ProductSubcategoryID FROM Production.Product pr ", { type: sourceDb.QueryTypes.SELECT })
         .then(function(products) {
           console.log("Products founded: "+products.length+"");
           //transfrom & load to DWH Dimension
@@ -98,7 +98,7 @@ exports.sync = function(req, res, next) {
     .then(function(specialOffers) {
       //transfrom & load to DWH Dimension
       console.log("Special offers founded: "+specialOffers.length+"");
-      salesOrderDetailsDependencies.push(Models.SpecialOffersDimension.bulkCreate(helpers.transformSpecialOffers(specialOffers)));
+      salesOrdersDependencies.push(Models.SpecialOffersDimension.bulkCreate(helpers.transformSpecialOffers(specialOffers)));
     });    
     
   //extract customers data from sourceDb
@@ -156,17 +156,14 @@ exports.sync = function(req, res, next) {
           sourceDb.query("SELECT sod.* FROM Sales.SalesOrderDetail sod INNER JOIN Sales.SalesOrderHeader so ON so.SalesOrderID = sod.SalesOrderID WHERE so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL) ", { type: sourceDb.QueryTypes.SELECT })
             .then(function(details){
               console.log("details founded: "+details.length+"");
-              Promise.all(salesOrderDetailsDependencies).then(function(){
-                console.log('Detail Dependencies loaded...');
-                Models.SalesOrderDetailsFact.bulkCreate(helpers.transformSaleOrderDetails(details)).then(function(){
+              Models.SalesOrderDetailsFact.bulkCreate(helpers.transformSaleOrderDetails(details)).then(function(){
                   console.log('details loaded');
-                });                
-              });
-              
+                });
             });
         });
       });  
-  });  
+  });
+
   //send response to view while we do all the stuff in background
   res.send("AdventureWorks Data Warehouse Model Synchronization Success!");
 };
