@@ -8,7 +8,11 @@ var SpecialOffersDimension = require('./SpecialOffersDimension').SpecialOffersDi
 Sale reason Dimension Model
 */
 var SalesOrderDetailsFact = db.define('sales_order_details_fact', {
-  //llave foranea a ubicacion geográfica
+  SalesOrderDetailId: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
   salesOrderId: {
     type: Sequelize.INTEGER,
     references: {

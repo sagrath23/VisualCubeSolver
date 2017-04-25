@@ -138,6 +138,27 @@ helpers.transformCurrencies = function(currencies) {
   return newCurrencies;
 };
 
+helpers.transformSaleOrderDetails = function(details){
+  var me = this,
+    newDetails = [];
+  for (var i = 0; i < details.length; i++) {
+    var detail = {
+        SalesOrderDetailId: details[i].salesorderdetailid,
+        salesOrderId: details[i].salesorderid,
+        carrierTrackingNumber: details[i].salesorderid,
+        orderQuantity: details[i].salesorderid,
+        productId: details[i].salesorderid,
+        specialOfferId: details[i].salesorderid,
+        unitPrice: details[i].salesorderid,
+        unitPriceDiscount: details[i].salesorderid,
+        lineTotal: details[i].salesorderid
+    }
+    newDetails.push(detail);
+  }
+
+  return newDetails;
+};
+
 helpers.transformCurrencyRates = function(currencyRates, currenciesRanges,  datesRanges) {
   var me = this,
     newRates = [];
