@@ -5,7 +5,6 @@ import { md5 } 		from './md5';
 import 'rxjs/add/operator/toPromise';
 
 import { User } 	from './user';
-import { Video } 	from '../videoplayer/video';
 
 
 @Injectable()
@@ -44,14 +43,6 @@ export class AuthService {
     				.post(this.authUrl, JSON.stringify({sessionId: sessionId}), {headers: this.headers})
     				.toPromise()
     				.then(res => res.json().data)
-    				.catch(this.handleError);
-	}
-
-	getVideos(sessionId: string): Promise<Video[]>{
-		const url = `${this.videosUrl}?sessionId=${sessionId}`;
-		return this.http.get(url)
-    				.toPromise()
-    				.then(res => res.json().data as Video[])
     				.catch(this.handleError);
 	}
 }

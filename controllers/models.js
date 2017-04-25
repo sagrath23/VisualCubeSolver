@@ -157,6 +157,7 @@ exports.sync = function(req, res, next) {
             .then(function(details){
               console.log("details founded: "+details.length+"");
               Promise.all(salesOrderDetailsDependencies).then(function(){
+                console.log('Detail Dependencies loaded...');
                 Models.SalesOrderDetailsFact.bulkCreate(helpers.transformSaleOrderDetails(details)).then(function(){
                   console.log('details loaded');
                 });                
