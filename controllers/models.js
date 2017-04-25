@@ -17,7 +17,7 @@ exports.sync = function(req, res, next) {
 
   var currenciesAndDatesData = [],
       currencyRatesDependencies = [],
-      customerDependencies
+      customerDependencies = [],
       salesOrdersDependencies = [],
       salesOrderDetailsDependencies = [],
       output = "";
@@ -116,7 +116,23 @@ exports.sync = function(req, res, next) {
       //transfrom & load to DWH Dimension
       console.log("sales territories founded: "+salesTerritories.length+"<br>");
       return Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(salesTerritories));
-    }));  
+    }));
+
+  /*
+  
+  sourceDb.query("SELECT * FROM Sales.SalesTerritory", { type: sourceDb.QueryTypes.SELECT })
+    .then(function(salesTerritories) {
+      //transfrom & load to DWH Dimension
+      console.log("sales territories founded: "+salesTerritories.length+"<br>");
+      Promise.all(Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(salesTerritories))
+        .then(function(){
+          return Models.SaleTerritoriesDimension.findAll();
+        })).then(function(salesTerritories){
+        console.log('loading geographies...');
+      });
+    })
+
+   */    
 
   //extract sales persons data from sourceDb
   salesOrdersDependencies.push(sourceDb.query("SELECT sp.BusinessEntityID, per.Title, per.FirstName, per.MiddleName, per.LastName, sp.SalesQuota, sp.Bonus, sp.CommissionPct, sp.SalesYTD, sp.SalesLastYear FROM Sales.SalesPerson sp INNER JOIN Person.Person per ON per.BusinessEntityID = sp.BusinessEntityID", { type: sourceDb.QueryTypes.SELECT })

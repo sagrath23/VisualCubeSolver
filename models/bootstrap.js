@@ -31,6 +31,8 @@ var SalesOrderReasonsFact = require('./SalesOrderReasonsFact').SalesOrderReasons
 var DatesDimension = require('./DatesDimension').DatesDimension;
 
 var CurrenciesDimension = require('./CurrenciesDimension').CurrenciesDimension;
+
+var GeographiesDimension = require('./GeographiesDimension').GeographiesDimension;
 //sync model
 db.sync({
   force: true
@@ -53,5 +55,6 @@ module.exports = {
   SalesPersonsDimension: SalesPersonsDimension,
   SaleTerritoriesDimension: SaleTerritoriesDimension,
   ShipMethodsDimension: ShipMethodsDimension,
-  SpecialOffersDimension: SpecialOffersDimension
+  SpecialOffersDimension: SpecialOffersDimension,
+  GeographiesDimension: GeographiesDimension
 };
