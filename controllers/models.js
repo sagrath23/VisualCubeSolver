@@ -85,12 +85,12 @@ exports.sync = function(req, res, next) {
       console.log("Categories & subcategories transform and loaded");
 
       //extract products data from sourceDb
-      sourceDb.query("SELECT pr.ProductID, pr.Name, pr.MakeFlag, pr.FinishedGoodsFlag,pr.Color,pr.StandardCost,pr.ListPrice,COALESCE(pr.ProductSubcategoryID,-1) AS ProductSubcategoryID FROM Production.Product pr ", { type: sourceDb.QueryTypes.SELECT })
+      salesOrderDetailsDependency.push(sourceDb.query("SELECT pr.ProductID, pr.Name, pr.MakeFlag, pr.FinishedGoodsFlag,pr.Color,pr.StandardCost,pr.ListPrice,COALESCE(pr.ProductSubcategoryID,-1) AS ProductSubcategoryID FROM Production.Product pr ", { type: sourceDb.QueryTypes.SELECT })
         .then(function(products) {
           console.log("Products founded: "+products.length+"");
           //transfrom & load to DWH Dimension
-          salesOrderDetailsDependencies.push(Models.ProductsDimension.bulkCreate(helpers.transformProducts(products)));
-        });
+          return Models.ProductsDimension.bulkCreate(helpers.transformProducts(products));
+        }));
     });
 
   //extract special offers data from sourceDb
