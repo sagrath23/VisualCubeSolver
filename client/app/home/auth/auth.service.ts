@@ -11,7 +11,6 @@ import { User } 	from './user';
 export class AuthService {
 
 	private authUrl = 'user';  // URL to web api
-	private videosUrl = 'videos';
 
 	private loggedUser: User;
 

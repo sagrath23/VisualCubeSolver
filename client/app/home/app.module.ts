@@ -14,7 +14,7 @@ import { AuthService }			from './auth/auth.service';
 import { AppRoutingModule }    from './routes/app-routing.module';
 
 @NgModule({
-  	imports:[ BrowserModule , FormsModule , HttpModule, AppRoutingModule],  
+  	imports:[ BrowserModule , FormsModule , HttpModule, AppRoutingModule],
   	declarations: [ AppComponent ],
   	providers: [ AuthService ],
   	bootstrap:    [ AppComponent ]
