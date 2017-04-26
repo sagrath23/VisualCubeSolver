@@ -145,13 +145,13 @@ helpers.transformSaleOrderDetails = function(details){
     var detail = {
         SalesOrderDetailId: details[i].salesorderdetailid,
         salesOrderId: details[i].salesorderid,
-        carrierTrackingNumber: details[i].salesorderid,
-        orderQuantity: details[i].salesorderid,
-        productId: details[i].salesorderid,
-        specialOfferId: details[i].salesorderid,
-        unitPrice: details[i].salesorderid,
-        unitPriceDiscount: details[i].salesorderid,
-        lineTotal: details[i].salesorderid
+        carrierTrackingNumber: details[i].carriertrackingnumber,
+        orderQuantity: details[i].orderqty,
+        productId: details[i].productid,
+        specialOfferId: details[i].specialofferid,
+        unitPrice: details[i].unitprice,
+        unitPriceDiscount: details[i].unitpricediscount,
+        lineTotal: details[i].linetotal
     }
     newDetails.push(detail);
   }
