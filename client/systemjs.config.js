@@ -24,8 +24,8 @@
       '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
       // other libraries
       'rxjs':                      'npm:rxjs',
-      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js'
-      'chartjs':                      'npm:chart.js/dist/Chart.min.js',
+      'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
+      'ng2-charts':                 'npm:ng2-charts/bundles/ng2-charts.umd.js',
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
