@@ -5,15 +5,31 @@
     <title>Angular Video Player</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <!-- MetisMenu CSS -->
+    <link href="node_modules/metismenu/dist/metisMenu.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="dashboard/dist/css/sb-admin-2.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- tether -->
     <link rel="stylesheet" href="node_modules/tether/dist/css/tether.min.css">
-    <link rel="stylesheet" href="styles.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
     <!-- Polyfill(s) for older browsers -->
     <script src="node_modules/core-js/client/shim.min.js"></script>
-
+    <!-- Zone.js-->
     <script src="node_modules/zone.js/dist/zone.js"></script>
+    <!-- Reflect metadata-->
     <script src="node_modules/reflect-metadata/Reflect.js"></script>
+    <!-- System.js-->
     <script src="node_modules/systemjs/dist/system.src.js"></script>
 
     <script src="systemjs.config.js"></script>
@@ -23,10 +39,23 @@
   </head>
 
   <body>
-    <my-app>Loading AppComponent content here ...</my-app>
+
+    <div id="wrapper">
+        <my-app>Loading AppComponent content here ...</my-app>    
+    </div>
+
+    
+    <!-- JQuery -->
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <!-- Tether -->
     <script src="node_modules/tether/dist/js/tether.min.js"></script>
+    <!-- Bootstrap -->
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="node_modules/metismenu//dist/metisMenu.min.js"></script>
+    <!--Chart.js -->
     <script src="node_modules/chart.js/src/chart.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="dashboard/dist/js/sb-admin-2.js"></script>
   </body>
 </html>

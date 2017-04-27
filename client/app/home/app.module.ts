@@ -8,14 +8,15 @@ import { HttpModule }    from '@angular/http';
 import { AppComponent }  from './app.component';
 
 //App Components
-import { AuthService }			from './auth/auth.service';
+import { AuthService }	from './auth/auth.service';
+import { DashboardComponent} from './dashboard/dashboard.component';
 
 //App routes
 import { AppRoutingModule }    from './routes/app-routing.module';
 
 @NgModule({
   	imports:[ BrowserModule , FormsModule , HttpModule, AppRoutingModule],
-  	declarations: [ AppComponent ],
+  	declarations: [ AppComponent, DashboardComponent ],
   	providers: [ AuthService ],
   	bootstrap:    [ AppComponent ]
 })
