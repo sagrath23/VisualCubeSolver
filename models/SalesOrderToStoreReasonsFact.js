@@ -1,6 +1,6 @@
 var db = require('../config/database');
 var Sequelize = require('sequelize');
-var SalesOrdersFact = require('./SalesOrdersToStoreFact').SalesOrdersToStoreFact;
+var SalesOrdersToStoreFact = require('./SalesOrdersToStoreFact').SalesOrdersToStoreFact;
 var SaleReasonsDimension = require('./SaleReasonsDimension').SaleReasonsDimension;
 
 /*
