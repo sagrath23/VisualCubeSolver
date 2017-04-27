@@ -8,6 +8,8 @@ var CurrencyRatesFact = require('./CurrencyRatesFact').CurrencyRatesFact;
 
 var CustomersDimension = require('./CustomersDimension').CustomersDimension;
 
+var StoresDimension = require('./StoresDimension').StoresDimension;
+
 var ProductCategoriesDimension = require('./ProductCategoriesDimension').ProductCategoriesDimension;
 
 var ProductsDimension = require('./ProductsDimension').ProductsDimension;
@@ -26,7 +28,13 @@ var SalesOrdersFact = require('./SalesOrdersFact').SalesOrdersFact;
 
 var SalesOrderDetailsFact = require('./SalesOrderDetailsFact').SalesOrderDetailsFact;
 
+var SalesOrdersToStoreFact = require('./SalesOrdersToStoreFact').SalesOrdersToStoreFact;
+
+var SalesOrderToStoreDetailsFact = require('./SalesOrderToStoreDetailsFact').SalesOrderToStoreDetailsFact;
+
 var SalesOrderReasonsFact = require('./SalesOrderReasonsFact').SalesOrderReasonsFact;
+
+var SalesOrderToStoreReasonsFact = require('./SalesOrderToStoreReasonsFact').SalesOrderToStoreReasonsFact;
 
 var DatesDimension = require('./DatesDimension').DatesDimension;
 
@@ -50,8 +58,11 @@ module.exports = {
   ProductsDimension: ProductsDimension,
   SaleReasonsDimension: SaleReasonsDimension,
   SalesOrderDetailsFact: SalesOrderDetailsFact,
+  SalesOrderToStoreDetailsFact: SalesOrderToStoreDetailsFact,
   SalesOrderReasonsFact: SalesOrderReasonsFact,
+  SalesOrderToStoreReasonsFact: SalesOrderToStoreReasonsFact,
   SalesOrdersFact: SalesOrdersFact,
+  SalesOrdersToStoreFact: SalesOrdersToStoreFact,
   SalesPersonsDimension: SalesPersonsDimension,
   SaleTerritoriesDimension: SaleTerritoriesDimension,
   ShipMethodsDimension: ShipMethodsDimension,
