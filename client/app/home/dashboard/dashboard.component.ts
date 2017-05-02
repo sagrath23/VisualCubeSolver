@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { SalesComponent } from '../sales/sales.component';
+
 
 @Component({
   moduleId: module.id,

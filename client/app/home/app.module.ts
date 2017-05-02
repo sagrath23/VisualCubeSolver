@@ -15,13 +15,14 @@ import { AppComponent }  from './app.component';
 //App Components
 import { AuthService }	from './auth/auth.service';
 import { DashboardComponent} from './dashboard/dashboard.component';
+import { SalesComponent } from './sales/sales.component';
 
 //App routes
 import { AppRoutingModule }    from './routes/app-routing.module';
 
 @NgModule({
   	imports:[ BrowserModule , FormsModule , HttpModule, AppRoutingModule, MaterialModule, NoopAnimationsModule],
-  	declarations: [ AppComponent, DashboardComponent ],
+  	declarations: [ AppComponent, DashboardComponent, SalesComponent],
   	providers: [ AuthService ],
   	bootstrap:    [ AppComponent ]
 })
