@@ -5,6 +5,7 @@ import { AuthService } from '../auth/auth.service';
   moduleId: module.id,
   selector: 'sales-report',
   templateUrl: 'sales.component.html',
+  styleUrls: ['sales.component.css'],
   providers: [AuthService]
 })
 
