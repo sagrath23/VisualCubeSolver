@@ -4,6 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
 import { HttpModule }    from '@angular/http';
 
+//Angular 2 Material WebComponents
+import { MaterialModule } from '@angular/material';
 //Angular Material Animations
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -18,7 +20,7 @@ import { DashboardComponent} from './dashboard/dashboard.component';
 import { AppRoutingModule }    from './routes/app-routing.module';
 
 @NgModule({
-  	imports:[ BrowserModule , FormsModule , HttpModule, AppRoutingModule, NoopAnimationsModule],
+  	imports:[ BrowserModule , FormsModule , HttpModule, AppRoutingModule, MaterialModule, NoopAnimationsModule],
   	declarations: [ AppComponent, DashboardComponent ],
   	providers: [ AuthService ],
   	bootstrap:    [ AppComponent ]
