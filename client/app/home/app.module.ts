@@ -8,6 +8,8 @@ import { HttpModule }    from '@angular/http';
 import { MaterialModule } from '@angular/material';
 //Angular Material Animations
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+//Chartjs module
+import { ChartsModule } from 'ng2-charts/ng2-charts';
 
 //App Main Component
 import { AppComponent }  from './app.component';
@@ -21,7 +23,7 @@ import { SalesComponent } from './sales/sales.component';
 import { AppRoutingModule }    from './routes/app-routing.module';
 
 @NgModule({
-  	imports:[ BrowserModule , FormsModule , HttpModule, AppRoutingModule, MaterialModule, NoopAnimationsModule],
+  	imports:[ BrowserModule , FormsModule , HttpModule, AppRoutingModule, MaterialModule, NoopAnimationsModule, ChartsModule],
   	declarations: [ AppComponent, DashboardComponent, SalesComponent],
   	providers: [ AuthService ],
   	bootstrap:    [ AppComponent ]
