@@ -25,16 +25,18 @@ export class SalesComponent implements OnInit {
   	ngOnInit(): void {
       var me = this;
 
-      me.authService.getSalesPerClientType()
+      me.getSales();
+  	}
+
+  	getSales():void{
+  		me.authService.getSalesPerClientType()
       .then(data => {
         me.pieChartLabels = data["labels"]; 
         me.pieChartData = data["data"];
     	me.isDataAvailable = true;
     	console.log('data loaded...');
     });
-
-  	}
-
+  	}	
   // events
   public chartClicked(e:any):void {
     console.log(e);
