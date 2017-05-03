@@ -43,7 +43,7 @@ var CurrenciesDimension = require('./CurrenciesDimension').CurrenciesDimension;
 var GeographiesDimension = require('./GeographiesDimension').GeographiesDimension;
 //sync model
 db.sync({
-  force: true
+  force: false
 }).then(function() {
   console.log("Dimensional model created");
   return true;
