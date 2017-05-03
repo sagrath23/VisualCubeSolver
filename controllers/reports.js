@@ -33,7 +33,7 @@ exports.getSalesCountPerMonth = function(req, res, next) {
 
   db.query(`SELECT 
               COUNT(sof."SalesOrderId") AS client_sales, 
-              dd.dateName AS date_range
+              dd."dateName" AS date_range
             FROM 
               sales_orders_facts sof
               INNER JOIN  dates_dimensions dd ON dd."dateDimensionId" = sof."SalesOrderId"
