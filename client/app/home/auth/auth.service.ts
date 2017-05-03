@@ -36,7 +36,7 @@ export class AuthService {
                		me.response = response.json() as Data;
                		console.log(me.response);
                		return me.response;
-               	} )
+               	})
                .catch(this.handleError);
   	}
 
