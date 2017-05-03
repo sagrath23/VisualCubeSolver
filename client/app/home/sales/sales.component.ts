@@ -29,7 +29,9 @@ export class SalesComponent implements OnInit {
       .then(data => {
         me.pieChartLabels = data["labels"]; 
         me.pieChartData = data["data"];
-    	me.isDataAvailable = true});
+    	me.isDataAvailable = true;
+    	console.log('data loaded...');
+    });
 
   	}
 
