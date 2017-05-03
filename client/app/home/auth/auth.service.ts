@@ -33,7 +33,7 @@ export class AuthService {
     	return me.http.get(serviceUrl)
                .toPromise()
                .then((response) =>{
-               		me.response = response.json() as Data
+               		me.response = response.json() as Data;
                		console.log(me.response);
                		return me.response;
                	} )
