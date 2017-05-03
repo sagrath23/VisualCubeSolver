@@ -16,6 +16,8 @@ export class AuthService {
 
 	private loggedUser: User;
 
+	private response:any;
+
 	private headers = new Headers({'Content-Type': 'application/json'});
 
 	constructor(private http: Http) { }
@@ -30,7 +32,11 @@ export class AuthService {
 			serviceUrl = "/sales/getsales";
     	return me.http.get(serviceUrl)
                .toPromise()
-               .then(response => response.json() as Data)
+               .then((response) =>{
+               		me.response = response.json() as Data
+               		console.log(me.response);
+               		return me.response;
+               	} )
                .catch(this.handleError);
   	}
 
