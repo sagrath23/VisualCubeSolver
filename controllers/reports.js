@@ -7,7 +7,7 @@ var Promise = require('bluebird');
 var Models = require('../models/bootstrap');
 
 exports.getSalesPerClientType = function(req, res, next) {
-  console.log("getting data...");
+  console.log("!!!getting data...");
   var me = this,
       salesReportDependencies = [];
 
@@ -23,4 +23,25 @@ exports.getSalesPerClientType = function(req, res, next) {
     //send response to view while we do all the stuff in background
     res.send(data);
   });      
+};
+
+exports.getSalesCountPerMonth = function(req, res, next) {
+  console.log("!!!getting data...");
+
+  var me = this,
+      salesReportDependencies = [];
+
+  db.query(`SELECT 
+              COUNT(sof."SalesOrderId") AS client_sales, 
+              dd.dateName AS date_range
+            FROM 
+              sales_orders_facts sof
+              INNER JOIN  dates_dimensions dd ON dd."dateDimensionId" = sof."SalesOrderId"
+            GROUP BY date_range
+            ORDER BY date_range ASC`, { type: db.QueryTypes.SELECT })
+  .then(function(result){
+    console.log("gotcha!!!");
+    console.log(result);
+    res.send(result);
+  });
 };

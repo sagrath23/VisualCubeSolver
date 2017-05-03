@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { SalesComponent } from '../sales/sales.component';
+import { ReportComponent } from '../report/report.component';
 
 
 @Component({

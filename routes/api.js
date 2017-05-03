@@ -5,14 +5,11 @@ var reports = require('../controllers/reports');
 
 var routesAPI = function(app) {
   //user routes
-  //app.post('/user/auth', users.auth);
+  
   app.get('/models/sync', models.sync);
   app.get('/sales/getsales', reports.getSalesPerClientType);
-  //
-  // //video routes
-  // app.get('/videos', helpers.isAuthenticated, videos.get);
-  // app.get('/video', helpers.isAuthenticated, videos.getOne);
-  // app.post('/video/ratings', helpers.isAuthenticated, videos.rate);
+  app.get('/sales/getsalespermonth', reports.getSalesCountPerMonth);
+  
 }
 
 

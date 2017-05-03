@@ -27,6 +27,21 @@ export class AuthService {
 	    return Promise.reject(error.message || error);
 	}
 
+	
+	
+	getSalesPerMonth(): Promise<Report> {
+		var me = this,
+			serviceUrl = "/sales/getsalespermonth";
+    	return me.http.get(serviceUrl)
+               .toPromise()
+               .then((response) =>{
+               		me.response = response.json() as Data;
+               		console.log(me.response);
+               		return me.response;
+               	})
+               .catch(this.handleError);
+  	}	
+
 	getSalesPerClientType(): Promise<Data> {
 		var me = this,
 			serviceUrl = "/sales/getsales";

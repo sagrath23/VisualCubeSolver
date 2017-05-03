@@ -18,13 +18,15 @@ import { AppComponent }  from './app.component';
 import { AuthService }	from './auth/auth.service';
 import { DashboardComponent} from './dashboard/dashboard.component';
 import { SalesComponent } from './sales/sales.component';
+import { ReportComponent } from './report/report.component';
+
 
 //App routes
 import { AppRoutingModule }    from './routes/app-routing.module';
 
 @NgModule({
   	imports:[ BrowserModule , FormsModule , HttpModule, AppRoutingModule, MaterialModule, NoopAnimationsModule, ChartsModule],
-  	declarations: [ AppComponent, DashboardComponent, SalesComponent],
+  	declarations: [ AppComponent, DashboardComponent, SalesComponent, ReportComponent],
   	providers: [ AuthService ],
   	bootstrap:    [ AppComponent ]
 })
