@@ -3,14 +3,6 @@
 		<div md-card-avatar class="example-header-image"></div>
 	    <md-card-title>Reporte de ventas</md-card-title>
 	</md-card-header>
-		<canvas baseChart class="baseChart" 
-          [data]="pieChartData"
-          [labels]="pieChartLabels"
-          [options]="pieChartOptions"
-          [chartType]="pieChartType"
-          (chartHover)="chartHovered($event)"
-          (chartClick)="chartClicked($event)"
-          *ngIf="isDataAvailable"></canvas>
 		<md-card-content>
 			<p>
 	      	Este reporte muestra como se han concentrado las ventas de la compañía entre los sectores de clientes identificados.

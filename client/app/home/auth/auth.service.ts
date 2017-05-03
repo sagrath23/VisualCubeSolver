@@ -29,15 +29,14 @@ export class AuthService {
 
 	
 	
-	getSalesPerMonth(): Promise<Report> {
+	getSalesPerMonth(): Promise<Data> {
 		var me = this,
 			serviceUrl = "/sales/getsalespermonth";
     	return me.http.get(serviceUrl)
                .toPromise()
                .then((response) =>{
-               		me.response = response.json() as Data;
-               		console.log(me.response);
-               		return me.response;
+               		console.log(response);
+               		return response.json() as Data;
                	})
                .catch(this.handleError);
   	}	
