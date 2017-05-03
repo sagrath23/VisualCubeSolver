@@ -20,8 +20,8 @@
     "pretest:once": "npm run build",
     "test:once": "karma start karma.conf.js --single-run",
     "lint": "tslint ./client/app/**/*.ts -t verbose",
-    "preinstall":   "npm install -g http-server",
-    "postinstall":  "ng build --prod"
+    "preinstall": "npm install -g http-server",
+    "postinstall": "ng build --prod"
   },
   "author": "Steven Augusto Villegas Castellanos",
   "license": "ISC",
@@ -49,6 +49,7 @@
     "jquery": "^3.2.1",
     "metismenu": "^2.7.0",
     "morgan": "^1.7.0",
+    "ng-scripts": "^1.1.2",
     "ng2-charts": "^1.5.0",
     "pg": "^6.1.5",
     "pg-hstore": "^2.3.2",
