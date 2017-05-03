@@ -14,14 +14,24 @@ var auth_service_1 = require("../auth/auth.service");
 var SalesComponent = (function () {
     function SalesComponent(authService) {
         this.authService = authService;
+        this.pieChartOptions = {
+            responsive: true
+        };
         this.pieChartType = 'pie';
+        this.isDataAvailable = false;
     }
     SalesComponent.prototype.ngOnInit = function () {
+        var me = this;
+        me.getSales();
+    };
+    SalesComponent.prototype.getSales = function () {
         var me = this;
         me.authService.getSalesPerClientType()
             .then(function (data) {
             me.pieChartLabels = data["labels"];
             me.pieChartData = data["data"];
+            me.isDataAvailable = true;
+            console.log('data loaded...');
         });
     };
     // events

@@ -23,6 +23,7 @@ var app_component_1 = require("./app.component");
 var auth_service_1 = require("./auth/auth.service");
 var dashboard_component_1 = require("./dashboard/dashboard.component");
 var sales_component_1 = require("./sales/sales.component");
+var report_component_1 = require("./report/report.component");
 //App routes
 var app_routing_module_1 = require("./routes/app-routing.module");
 var AppModule = (function () {
@@ -33,7 +34,7 @@ var AppModule = (function () {
 AppModule = __decorate([
     core_1.NgModule({
         imports: [platform_browser_1.BrowserModule, forms_1.FormsModule, http_1.HttpModule, app_routing_module_1.AppRoutingModule, material_1.MaterialModule, animations_1.NoopAnimationsModule, ng2_charts_1.ChartsModule],
-        declarations: [app_component_1.AppComponent, dashboard_component_1.DashboardComponent, sales_component_1.SalesComponent],
+        declarations: [app_component_1.AppComponent, dashboard_component_1.DashboardComponent, sales_component_1.SalesComponent, report_component_1.ReportComponent],
         providers: [auth_service_1.AuthService],
         bootstrap: [app_component_1.AppComponent]
     })

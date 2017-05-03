@@ -23,11 +23,25 @@ var AuthService = (function () {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.message || error);
     };
+    AuthService.prototype.getSalesPerMonth = function () {
+        var me = this, serviceUrl = "/sales/getsalespermonth";
+        return me.http.get(serviceUrl)
+            .toPromise()
+            .then(function (response) {
+            console.log(response);
+            return response.json();
+        })
+            .catch(this.handleError);
+    };
     AuthService.prototype.getSalesPerClientType = function () {
         var me = this, serviceUrl = "/sales/getsales";
         return me.http.get(serviceUrl)
             .toPromise()
-            .then(function (response) { return response.json().data; })
+            .then(function (response) {
+            me.response = response.json();
+            console.log(me.response);
+            return me.response;
+        })
             .catch(this.handleError);
     };
     AuthService.prototype.login = function (username, password) {

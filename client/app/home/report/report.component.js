@@ -11,37 +11,33 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var auth_service_1 = require("../auth/auth.service");
-var SalesComponent = (function () {
-    function SalesComponent(authService) {
+var ReportComponent = (function () {
+    function ReportComponent(authService) {
         this.authService = authService;
-        this.pieChartType = 'pie';
     }
-    SalesComponent.prototype.ngOnInit = function () {
+    ReportComponent.prototype.ngOnInit = function () {
         var me = this;
-        me.authService.getSalesPerClientType()
+        me.getSales();
+    };
+    ReportComponent.prototype.getSales = function () {
+        var me = this;
+        me.authService.getSalesPerMonth()
             .then(function (data) {
-            me.pieChartLabels = data["labels"];
-            me.pieChartData = data["data"];
+            console.log(data);
+            console.log('data loaded...');
         });
     };
-    // events
-    SalesComponent.prototype.chartClicked = function (e) {
-        console.log(e);
-    };
-    SalesComponent.prototype.chartHovered = function (e) {
-        console.log(e);
-    };
-    return SalesComponent;
+    return ReportComponent;
 }());
-SalesComponent = __decorate([
+ReportComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
-        selector: 'sales-report',
-        templateUrl: 'sales.component.html',
-        styleUrls: ['sales.component.css'],
+        selector: 'report-component',
+        templateUrl: 'report.component.html',
+        styleUrls: ['report.component.css'],
         providers: [auth_service_1.AuthService]
     }),
     __metadata("design:paramtypes", [auth_service_1.AuthService])
-], SalesComponent);
-exports.SalesComponent = SalesComponent;
-//# sourceMappingURL=sales.component.js.map
+], ReportComponent);
+exports.ReportComponent = ReportComponent;
+//# sourceMappingURL=report.component.js.map
