@@ -18,8 +18,7 @@ exports.getSalesPerClientType = function(req, res, next) {
     //retrieve data to front
     var data = {
       labels: ['Download Sales', 'In-Store Sales', 'Mail Sales'],
-      data: [250, 600, 3
-      00]
+      data: [250, 600, 300]
     };
     //send response to view while we do all the stuff in background
     res.send(data);
