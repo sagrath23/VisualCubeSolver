@@ -14,7 +14,11 @@ export class SalesComponent implements OnInit {
   // Pie
   public pieChartLabels:string[];
   public pieChartData:number[];
+  public pieChartOptions: any = {
+  	responsive:true
+  };
   public pieChartType:string = 'pie';
+  public isDataAvailable:boolean = false;
 
   	constructor(private authService: AuthService) { }
 
@@ -24,7 +28,8 @@ export class SalesComponent implements OnInit {
       me.authService.getSalesPerClientType()
       .then(data => {
         me.pieChartLabels = data["labels"]; 
-        me.pieChartData = data["data"]});
+        me.pieChartData = data["data"];
+    	me.isDataAvailable = true});
 
   	}
 

@@ -7,9 +7,11 @@
 		<canvas baseChart class="baseChart" 
           [data]="pieChartData"
           [labels]="pieChartLabels"
+          [options]="pieChartOptions"
           [chartType]="pieChartType"
           (chartHover)="chartHovered($event)"
-          (chartClick)="chartClicked($event)"></canvas>
+          (chartClick)="chartClicked($event)"
+          *ngIf="isDataAvailable"></canvas>
 		<md-card-content>
 			<p>
 	      		The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
