@@ -25,12 +25,12 @@ export class AuthService {
 	    return Promise.reject(error.message || error);
 	}
 
-	getSalesPerClientType(): Promise<Data[]> {
+	getSalesPerClientType(): Promise<Data> {
 		var me = this,
 			serviceUrl = "/sales/getsales";
     	return me.http.get(serviceUrl)
                .toPromise()
-               .then(response => response.json().data as Data[])
+               .then(response => response.json() as Data)
                .catch(this.handleError);
   	}
 
