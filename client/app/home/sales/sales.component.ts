@@ -11,16 +11,22 @@ import { AuthService } from '../auth/auth.service';
 
 export class SalesComponent implements OnInit {
 
+  // Pie
+  public pieChartLabels:string[];
+  public pieChartData:number[];
+  public pieChartType:string = 'pie';
+
   	constructor(private authService: AuthService) { }
 
   	ngOnInit(): void {
+      var me = this;
+
+      me.authService.getSalesPerClientType()
+      .then(data => {
+        me.pieChartLabels = data["labels"]; 
+        me.pieChartData = data["data"]});
 
   	}
-
-  	// Pie
-  public pieChartLabels:string[] = ['Download Sales', 'In-Store Sales', 'Mail Sales'];
-  public pieChartData:number[] = [300, 500, 100];
-  public pieChartType:string = 'pie';
 
   // events
   public chartClicked(e:any):void {

@@ -1,4 +1,5 @@
 var models = require('../controllers/models');
+var reports = require('../controllers/reports');
 // var videos = require('../controllers/videos');
 // var helpers = require('../helpers/helperFunctions');
 
@@ -6,6 +7,7 @@ var routesAPI = function(app) {
   //user routes
   //app.post('/user/auth', users.auth);
   app.get('/models/sync', models.sync);
+  app.get('/sales/getsales', reports.getSalesPerClientType);
   //
   // //video routes
   // app.get('/videos', helpers.isAuthenticated, videos.get);

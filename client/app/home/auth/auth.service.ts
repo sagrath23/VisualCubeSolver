@@ -6,6 +6,8 @@ import 'rxjs/add/operator/toPromise';
 
 import { User } 	from './user';
 
+import { Data } 	from './data';
+
 
 @Injectable()
 export class AuthService {
@@ -22,6 +24,15 @@ export class AuthService {
 		console.error('An error occurred', error); // for demo purposes only
 	    return Promise.reject(error.message || error);
 	}
+
+	getSalesPerClientType(): Promise<Data[]> {
+		var me = this,
+			serviceUrl = "/sales/getsales";
+    	return me.http.get(serviceUrl)
+               .toPromise()
+               .then(response => response.json().data as Data[])
+               .catch(this.handleError);
+  	}
 
 	login(username: string,password: string): Promise<User>{
 		const url = `${this.authUrl}/auth`;
