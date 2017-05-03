@@ -40,7 +40,7 @@ exports.getSalesCountPerMonth = function(req, res, next) {
             GROUP BY date_range
             ORDER BY date_range ASC`, { type: db.QueryTypes.SELECT })
   .then(function(result){
-    console.log("gotcha!!!");
+    console.log("-----------------------------------------gotcha count!!!");
     console.log(result);
     res.send(result);
   });
