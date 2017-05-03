@@ -29,6 +29,8 @@ export class SalesComponent implements OnInit {
   	}
 
   	getSales():void{
+  		var me = this;
+  		
   		me.authService.getSalesPerClientType()
       .then(data => {
         me.pieChartLabels = data["labels"]; 
