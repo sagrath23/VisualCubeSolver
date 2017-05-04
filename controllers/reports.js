@@ -11,11 +11,18 @@ exports.getSalesPerClientType = function(req, res, next) {
   var me = this,
       salesReportDependencies = [];
 
-  salesReportDependencies.push(db.query('SELECT COUNT(sof."SalesOrderId") AS client_sales, COUNT(sots."SalesOrderId") AS store_sales FROM sales_orders_facts sof, sales_orders_to_store_facts sots', { type: db.QueryTypes.SELECT }));
+  salesReportDependencies.push(db.query(`SELECT 
+                                            COUNT(sof."SalesOrderId") AS client_sales, 
+                                            COUNT(sots."SalesOrderId") AS store_sales 
+                                         FROM 
+                                            sales_orders_facts sof, 
+                                            sales_orders_to_store_facts sots`, { type: db.QueryTypes.SELECT }));
 
   Promise.all(salesReportDependencies).then(function(result){
+    console.log("............................................");
     console.log(result);
     //retrieve data to front
+    console.log(result);
     var data = {
       labels: ['Download Sales', 'In-Store Sales', 'Mail Sales'],
       data: [250, 600, 300]
