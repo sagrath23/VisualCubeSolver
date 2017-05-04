@@ -235,6 +235,7 @@ helpers.transformSalePersons = function(salesPersons) {
 helpers.transformSalesOrders = function(salesOrders, DatesDimension) {
   var me = this,
     newOrders = [];
+  console.log(DatesDimension);
   for (var i = 0; i < salesOrders.length; i++) {
     var order = {
       SalesOrderId: salesOrders[i].salesorderid,
