@@ -37,7 +37,14 @@ exports.getSalesCountPerMonth = function(req, res, next) {
 
   var me = this,
       salesReportDependencies = [];
-
+  Models.SalesOrdersFact.findAll({
+      attributes: [ sequelize.fn('count', sequelize.col('column2')),'dateDimensionId'], 
+      group: ['sof."dateDimensionId"']}).then(function(result){
+        console.log("-----------------------------------------gotcha count!!!");
+        console.log(result);
+        res.send(result);
+      });
+  /*
   db.query(`SELECT 
               COUNT(sof."SalesOrderId") AS client_sales, 
               sof."dateDimensionId" AS date_dimension
@@ -49,4 +56,5 @@ exports.getSalesCountPerMonth = function(req, res, next) {
     console.log(result);
     res.send(result);
   });
+  */
 };
