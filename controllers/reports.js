@@ -38,7 +38,7 @@ exports.getSalesCountPerMonth = function(req, res, next) {
   var me = this,
       salesReportDependencies = [];
   Models.SalesOrdersFact.findAll({
-      attributes: [ sequelize.fn('count', sequelize.col('column2')),'dateDimensionId'], 
+      attributes: [ db.fn('count', db.col('SalesOrderId')),'dateDimensionId'], 
       group: ['sof."dateDimensionId"']}).then(function(result){
         console.log("-----------------------------------------gotcha count!!!");
         console.log(result);
