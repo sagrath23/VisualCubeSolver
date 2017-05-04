@@ -118,30 +118,15 @@ exports.sync = function(req, res, next) {
       return Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(salesTerritories));
     }));
 
-  /*
-  
-  sourceDb.query("SELECT * FROM Sales.SalesTerritory", { type: sourceDb.QueryTypes.SELECT })
-    .then(function(salesTerritories) {
-      //transfrom & load to DWH Dimension
-      console.log("sales territories founded: "+salesTerritories.length+"");
-      Promise.all(Models.SaleTerritoriesDimension.bulkCreate(helpers.transformSaleTerritories(salesTerritories))
-        .then(function(){
-          return Models.SaleTerritoriesDimension.findAll();
-        })).then(function(salesTerritories){
-        console.log('loading geographies...');
-      });
-    })
-   */    
-
   //extract sales persons data from sourceDb
   salesOrdersDependencies.push(sourceDb.query("SELECT sp.BusinessEntityID, per.Title, per.FirstName, per.MiddleName, per.LastName, sp.SalesQuota, sp.Bonus, sp.CommissionPct, sp.SalesYTD, sp.SalesLastYear FROM Sales.SalesPerson sp INNER JOIN Person.Person per ON per.BusinessEntityID = sp.BusinessEntityID", { type: sourceDb.QueryTypes.SELECT })
     .then(function(salesPersons) {
       console.log("sales persons founded: "+salesPersons.length+"");
       //transfrom & load to DWH Dimension
       return Models.SalesPersonsDimension.bulkCreate(helpers.transformSalePersons(salesPersons));
-    }));
-    
+    }));  
 
+  //extract sales orders & sales orders details per users
   Promise.all(salesOrdersDependencies).then(function(responses){
     console.log("Sync all dimensions to load Sales orders");
     //extract Sales Orders from sourceDb  
