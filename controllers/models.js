@@ -23,13 +23,7 @@ exports.sync = function(req, res, next) {
       output = "";
 
   //get dates data
-  currenciesAndDatesData.push(sourceDb.query(`SELECT 
-                                                MIN(cr.currencyratedate) AS mindate, 
-                                                MAX(cr.currencyratedate) AS maxdate, 
-                                                CONCAT(EXTRACT(YEAR FROM cr.currencyratedate),
-                                                EXTRACT(MONTH FROM cr.currencyratedate)) AS datename 
-                                              FROM Sales.CurrencyRate cr 
-                                              GROUP BY datename ORDER BY mindate ASC`, { type: sourceDb.QueryTypes.SELECT }));
+  currenciesAndDatesData.push(sourceDb.query("SELECT MIN(cr.currencyratedate) AS mindate, MAX(cr.currencyratedate) AS maxdate, CONCAT(EXTRACT(YEAR FROM cr.currencyratedate), EXTRACT(MONTH FROM cr.currencyratedate)) AS datename FROM Sales.CurrencyRate cr GROUP BY datename ORDER BY mindate ASC", { type: sourceDb.QueryTypes.SELECT }));
 
   //and get currencies data
   currenciesAndDatesData.push(sourceDb.query("SELECT cur.currencycode,cur.name FROM Sales.Currency cur", { type: sourceDb.QueryTypes.SELECT }));
@@ -136,32 +130,7 @@ exports.sync = function(req, res, next) {
   Promise.all(salesOrdersDependencies).then(function(responses){
     console.log("Sync all dimensions to load Sales orders");
     //extract Sales Orders from sourceDb  
-    sourceDb.query(`SELECT 
-                      so.SalesOrderID, 
-                      so.RevisionNumber, 
-                      so.OrderDate, 
-                      so.dueDate, 
-                      so.ShipDate, 
-                      so.Status, 
-                      so.OnlineOrderFlag, 
-                      so.PurchaseOrderNumber, 
-                      so.AccountNumber, 
-                      so.CustomerID, 
-                      so.SalesPersonID, 
-                      so.TerritoryID, 
-                      so.ShipMethodID, 
-                      so.TaxAmt, 
-                      so.Freight, 
-                      so.TotalDue, 
-                      so.Comment 
-                    FROM 
-                      Sales.SalesOrderHeader so 
-                    WHERE so.CustomerID IN (SELECT 
-                                              cus.CustomerID 
-                                            FROM 
-                                              Sales.Customer cus 
-                                                INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID 
-                                            WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL)`, { type: sourceDb.QueryTypes.SELECT })
+    sourceDb.query("SELECT so.SalesOrderID, so.RevisionNumber, so.OrderDate, so.dueDate, so.ShipDate, so.Status, so.OnlineOrderFlag, so.PurchaseOrderNumber, so.AccountNumber, so.CustomerID, so.SalesPersonID, so.TerritoryID, so.ShipMethodID, so.TaxAmt, so.Freight, so.TotalDue, so.Comment FROM Sales.SalesOrderHeader so WHERE so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL)", { type: sourceDb.QueryTypes.SELECT })
       .then(function(salesOrders) {
         console.log("sales orders founded: "+salesOrders.length+"");
         //transfrom & load to DWH Dimension
