@@ -44,8 +44,7 @@ exports.getSalesCountPerMonth = function(req, res, next) {
             FROM 
               sales_orders_facts sof
               INNER JOIN  dates_dimensions dd ON dd."dateDimensionId" = sof."dateDimensionId"
-            GROUP BY dd."dateName"
-            ORDER BY dd."dateName" ASC`, { type: db.QueryTypes.SELECT })
+            GROUP BY dd."dateName"`, { type: db.QueryTypes.SELECT })
   .then(function(result){
     console.log("-----------------------------------------gotcha count!!!");
     console.log(result);
