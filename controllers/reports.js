@@ -37,6 +37,7 @@ exports.getSalesCountPerMonth = function(req, res, next) {
 
   var me = this,
       salesReportDependencies = [];
+  /*
   Models.SalesOrdersFact.findAll({
       attributes: ['dateDimensionId',db.fn('count', db.col('SalesOrderId'))], 
       group: ['dateDimensionId']}).then(function(result){
@@ -44,17 +45,19 @@ exports.getSalesCountPerMonth = function(req, res, next) {
         console.log(result);
         res.send(result);
       });
-  /*
+      
+  
   db.query(`SELECT 
               COUNT(sof."SalesOrderId") AS client_sales, 
               sof."dateDimensionId" AS date_dimension
             FROM 
               sales_orders_facts sof
-            GROUP BY sof."dateDimensionId"`, { type: db.QueryTypes.SELECT })
+            GROUP BY sof."dateDimensionId"`, { type: db.QueryTypes.SELECT })*/
+  db.query(`SELECT DISTINCT sof."dateDimensionId" AS date_dimension FROM sales_orders_facts sof`, { type: db.QueryTypes.SELECT })
   .then(function(result){
     console.log("-----------------------------------------gotcha count!!!");
     console.log(result);
     res.send(result);
   });
-  */
+  
 };
