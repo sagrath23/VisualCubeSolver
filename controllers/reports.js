@@ -39,7 +39,7 @@ exports.getSalesCountPerMonth = function(req, res, next) {
       salesReportDependencies = [];
   Models.SalesOrdersFact.findAll({
       attributes: [ db.fn('count', db.col('SalesOrderId')),'dateDimensionId'], 
-      group: ['sof."dateDimensionId"']}).then(function(result){
+      group: ['dateDimensionId']}).then(function(result){
         console.log("-----------------------------------------gotcha count!!!");
         console.log(result);
         res.send(result);
