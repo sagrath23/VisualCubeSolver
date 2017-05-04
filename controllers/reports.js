@@ -36,7 +36,7 @@ exports.getSalesCountPerMonth = function(req, res, next) {
               dd."dateName" AS date_range
             FROM 
               sales_orders_facts sof
-              INNER JOIN  dates_dimensions dd ON dd."dateDimensionId" = sof."SalesOrderId"
+              INNER JOIN  dates_dimensions dd ON dd."dateDimensionId" = sof."dateDimensionId"
             GROUP BY date_range
             ORDER BY date_range ASC`, { type: db.QueryTypes.SELECT })
   .then(function(result){
