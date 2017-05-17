@@ -113,6 +113,7 @@ helpers.transformDates = function(dates) {
       dateMin: dates[i].mindate,
       dateMax: dates[i].maxdate
     }
+
     newDates.push(date);
   }
   //push null date
@@ -122,6 +123,9 @@ helpers.transformDates = function(dates) {
     dateMin: '1970-01-01 00:00:00.000 +00:00',
     dateMax: '2018-01-01 00:00:00.000 +00:00'
   });
+
+  //hotfix firstdate
+  newDates[0].dateMin = '2011-05-01T05:00:00.000Z';
 
   return newDates;
 };
