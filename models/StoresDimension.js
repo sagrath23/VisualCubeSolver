@@ -10,6 +10,7 @@ var StoresDimension = db.define('stores_dimension', {
     primaryKey: true,
     autoIncrement: true
   },
+  name: Sequelize.STRING,
   title: Sequelize.STRING,
   firstName: Sequelize.STRING,
   middleName: Sequelize.STRING,

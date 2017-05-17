@@ -137,15 +137,15 @@ exports.sync = function(req, res, next) {
       return Models.SalesPersonsDimension.bulkCreate(helpers.transformSalePersons(salesPersons));
     }));
 
-  //extract customers data from sourceDb
+  //extract stores data from sourceDb
   //we took all records that StoreID is NULL
-  /*dependenciesPosition.push('Stores');
-  salesOrdersDependencies.push(sourceDb.query("SELECT cus.CustomerID, per.Title, per.FirstName, per.MiddleName, per.LastName FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID INNER JOIN Sales.Store stor ON stor.BusinessEntityID = cus.StoreID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL", { type: sourceDb.QueryTypes.SELECT })
-    .then(function(customers) {
-      //console.log("Customers founded: "+customers.length+"");
+  dependenciesPosition.push('Stores');
+  salesOrdersDependencies.push(sourceDb.query("SELECT cus.CustomerID, stor.Name, per.Title, per.FirstName, per.MiddleName, per.LastName FROM Sales.Customer cus LEFT JOIN Person.Person per ON cus.PersonID = per.BusinessEntityID INNER JOIN Sales.Store stor ON stor.BusinessEntityID = cus.StoreID WHERE cus.StoreID IS NOT NULL", { type: sourceDb.QueryTypes.SELECT })
+    .then(function(stores) {
+      console.log("stores founded: "+stores.length+"");
       //transfrom & load to DWH Dimension
-      return Models.CustomersDimension.bulkCreate(helpers.transformCustomers(customers));
-    })); */ 
+      return Models.StoresDimension.bulkCreate(helpers.transformStores(stores));
+    }));
 
   //extract stores data from sourceDb    
 
@@ -173,14 +173,14 @@ exports.sync = function(req, res, next) {
 
 
     //extract SalesOrders to Stores from sourceDb
-    /*sourceDb.query("SELECT so.SalesOrderID, so.RevisionNumber, so.OrderDate, so.dueDate, so.ShipDate, so.Status, so.OnlineOrderFlag, so.PurchaseOrderNumber, so.AccountNumber, so.CustomerID, so.SalesPersonID, so.TerritoryID, so.ShipMethodID, so.TaxAmt, so.Freight, so.TotalDue, so.Comment FROM Sales.SalesOrderHeader so WHERE so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.StoreID IS NOT NULL)", { type: sourceDb.QueryTypes.SELECT })
+    sourceDb.query("SELECT so.SalesOrderID, so.RevisionNumber, so.OrderDate, so.dueDate, so.ShipDate, so.Status, so.OnlineOrderFlag, so.PurchaseOrderNumber, so.AccountNumber, so.CustomerID, so.SalesPersonID, so.TerritoryID, so.ShipMethodID, so.TaxAmt, so.Freight, so.TotalDue, so.Comment FROM Sales.SalesOrderHeader so WHERE so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus LEFT JOIN Person.Person per ON cus.PersonID = per.BusinessEntityID INNER JOIN Sales.Store stor ON stor.BusinessEntityID = cus.StoreID WHERE cus.StoreID IS NOT NULL)", { type: sourceDb.QueryTypes.SELECT })
       .then(function(salesOrders) {
         console.log("sales orders to store founded: "+salesOrders.length+"");
         //transfrom & load to DWH Dimension
         Promise.all([Models.SalesOrdersToStoreFact.bulkCreate(helpers.transformSalesOrders(salesOrders, dates)).then(function(){ return Models.SalesOrdersFact.findAll(); })]).then(function(response){
-          console.log("sales order added");
+          console.log("sales order to store added");
           //now, we can add orders details
-          sourceDb.query("SELECT sod.* FROM Sales.SalesOrderDetail sod INNER JOIN Sales.SalesOrderHeader so ON so.SalesOrderID = sod.SalesOrderID WHERE sod.ProductID IS NOT NULL AND so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL) ", { type: sourceDb.QueryTypes.SELECT })
+          sourceDb.query("SELECT sod.* FROM Sales.SalesOrderDetail sod INNER JOIN Sales.SalesOrderHeader so ON so.SalesOrderID = sod.SalesOrderID WHERE sod.ProductID IS NOT NULL AND so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus LEFT JOIN Person.Person per ON cus.PersonID = per.BusinessEntityID INNER JOIN Sales.Store stor ON stor.BusinessEntityID = cus.StoreID WHERE cus.StoreID IS NOT NULL) ", { type: sourceDb.QueryTypes.SELECT })
             .then(function(details){
               console.log("details founded: "+details.length+"");
               Models.SalesOrderDetailsFact.bulkCreate(helpers.transformSaleOrderDetails(details)).then(function(){
@@ -188,7 +188,7 @@ exports.sync = function(req, res, next) {
                 });
             });
         });
-      });*/
+      });
         
   });
 

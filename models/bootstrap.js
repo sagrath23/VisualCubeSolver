@@ -67,5 +67,6 @@ module.exports = {
   SaleTerritoriesDimension: SaleTerritoriesDimension,
   ShipMethodsDimension: ShipMethodsDimension,
   SpecialOffersDimension: SpecialOffersDimension,
+  StoresDimension: StoresDimension,
   GeographiesDimension: GeographiesDimension
 };

@@ -200,6 +200,24 @@ helpers.transformCustomers = function(customers) {
   return newCustomers;
 };
 
+helpers.transformStores = function(stores) {
+  var me = this,
+    newStores = [];
+  for (var i = 0; i < stores.length; i++) {
+    var store = {
+      customerId: stores[i].customerid,
+      name: stores[i].name,
+      title: stores[i].title,
+      firstName: stores[i].firstname,
+      middleName: stores[i].middlename,
+      lastName: stores[i].lastname
+    }
+    newStores.push(store);
+  }
+
+  return newStores;
+};
+
 helpers.transformShipMethods = function(shipMethods) {
   var me = this,
     newShipMethods = [];
