@@ -23,6 +23,7 @@ var DashboardComponent = (function () {
             .then(function (data) {
             console.log('data loaded...');
             console.log(data);
+            me.result = data;
         });
         console.log(query);
     };
