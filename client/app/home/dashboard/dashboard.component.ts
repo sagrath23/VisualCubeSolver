@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
     executeQuery(query:string):any{
     	var me = this;
 
-    	me.authService.getSalesPerClientType()
+    	me.authService.executeQuery(query)
     		.then(data => {
     			console.log('data loaded...');
     			console.log(data);

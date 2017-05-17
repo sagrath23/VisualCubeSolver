@@ -19,7 +19,7 @@ var DashboardComponent = (function () {
     };
     DashboardComponent.prototype.executeQuery = function (query) {
         var me = this;
-        me.authService.getSalesPerClientType()
+        me.authService.executeQuery(query)
             .then(function (data) {
             console.log('data loaded...');
             console.log(data);
