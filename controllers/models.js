@@ -37,7 +37,7 @@ exports.sync = function(req, res, next) {
     //console.log(" currencies founded: "+responses[1].length+"");
     currencyRatesDependencies.push(Models.DatesDimension.bulkCreate(helpers.transformDates(responses[0])).then(function(){ return Models.DatesDimension.findAll();}));
     //push DateDimension dependency on sales Orders Dependencies
-    dependenciesPosition.push('CurrencyRates');
+    dependenciesPosition.push('Dates');
     salesOrdersDependencies.push(currencyRatesDependencies[0]);
     
 
@@ -145,6 +145,11 @@ exports.sync = function(req, res, next) {
     //como no conozco exactamente en qué posicion está la respuesta de las fechas, paso a buscarla
     //
     console.log(dependenciesPosition); 
+    for(var i = 0; i < dependenciesPosition.length; i++){
+      if(dependenciesPosition[i] == 'Dates'){
+        DateDimensionPosition = i;
+      }
+    }
     //extract Sales Orders from sourceDb
     sourceDb.query("SELECT so.SalesOrderID, so.RevisionNumber, so.OrderDate, so.dueDate, so.ShipDate, so.Status, so.OnlineOrderFlag, so.PurchaseOrderNumber, so.AccountNumber, so.CustomerID, so.SalesPersonID, so.TerritoryID, so.ShipMethodID, so.TaxAmt, so.Freight, so.TotalDue, so.Comment FROM Sales.SalesOrderHeader so WHERE so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL)", { type: sourceDb.QueryTypes.SELECT })
       .then(function(salesOrders) {

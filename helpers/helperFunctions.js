@@ -241,7 +241,7 @@ helpers.transformSalePersons = function(salesPersons) {
 helpers.transformSalesOrders = function(salesOrders, DatesDimension) {
   var me = this,
       newOrders = [],
-      counterOrders = 10;
+      counterOrders = 0;
 
   for (var i = 0; i < salesOrders.length; i++) {
     var order = {
