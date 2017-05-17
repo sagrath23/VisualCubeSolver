@@ -277,7 +277,9 @@ helpers.findDateDimensionId = function(currencyRateDate, datesRanges, outState) 
       maxDate = new Date(datesRanges[i].dataValues.dateMax);
     if (rateDate >= minDate && rateDate <= maxDate) {
       if(counter < 10 && outState){
+        
         console.log('range '+datesRanges[i].dataValues.dateDimensionId);
+        
         counter++;
       }
       
