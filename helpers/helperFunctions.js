@@ -170,7 +170,7 @@ helpers.transformCurrencyRates = function(currencyRates, currenciesRanges,  date
     newRates = [];
   for (var i = 0; i < currencyRates.length; i++) {
     var currencyRate = {
-      dateDimensionId: me.findDateDimensionId(currencyRates[i].currencyratedate, datesRanges, false),
+      dateDimensionId: me.findDateDimensionId(currencyRates[i].currencyratedate, datesRanges),
       currencyRateDate: currencyRates[i].currencyratedate,
       fromCurrencyCode: me.findCurrencyDimensionId(currencyRates[i].fromcurrencycode, currenciesRanges),
       toCurrencyCode: me.findCurrencyDimensionId(currencyRates[i].tocurrencycode, currenciesRanges),
@@ -247,7 +247,7 @@ helpers.transformSalesOrders = function(salesOrders, DatesDimension) {
     var order = {
       SalesOrderId: salesOrders[i].salesorderid,
       revisionNumber: salesOrders[i].revisionnumber,
-      dateDimensionId: me.findDateDimensionId(salesOrders[i].orderdate, DatesDimension, ((counterOrders < 10) ? true : false)),
+      dateDimensionId: me.findDateDimensionId(salesOrders[i].orderdate, DatesDimension),
       orderDate: salesOrders[i].orderdate,
       dueDate: salesOrders[i].duedate,
       shipDate: salesOrders[i].shipdate,
@@ -274,27 +274,14 @@ helpers.transformSalesOrders = function(salesOrders, DatesDimension) {
   return newOrders;
 }
 
-helpers.findDateDimensionId = function(currencyRateDate, datesRanges, outState) {
+helpers.findDateDimensionId = function(currencyRateDate, datesRanges) {
   var rateDate = new Date(currencyRateDate);
-  if(outState){
-    console.log('rate date');
-    console.log(rateDate);
-  }
+  
   for (var i = 0; i < datesRanges.length; i++) {
     var minDate = new Date(datesRanges[i].dataValues.dateMin),
       maxDate = new Date(datesRanges[i].dataValues.dateMax);
-    if(outState){
-      console.log(datesRanges[i]);
-      console.log('dateRange Name: '+datesRanges[i].dataValues.dateName);
-    }  
+    
     if (rateDate >= minDate && rateDate <= maxDate) {
-      if(outState && counter < 10){
-        
-        console.log('range '+datesRanges[i].dataValues.dateDimensionId);
-        
-        counter++;
-      }
-      
       return datesRanges[i].dataValues.dateDimensionId;
     }
   }
