@@ -4,6 +4,8 @@ var Sequelize = require('sequelize');
 
 var helpers = {};
 
+var counter = 0;
+
 helpers.transformSalesReasons = function(reasons) {
   var newReasons = [];
   for (var i = 0; i < reasons.length; i++) {
@@ -164,7 +166,7 @@ helpers.transformCurrencyRates = function(currencyRates, currenciesRanges,  date
     newRates = [];
   for (var i = 0; i < currencyRates.length; i++) {
     var currencyRate = {
-      dateDimensionId: me.findDateDimensionId(currencyRates[i].currencyratedate, datesRanges),
+      dateDimensionId: me.findDateDimensionId(currencyRates[i].currencyratedate, datesRanges, false),
       currencyRateDate: currencyRates[i].currencyratedate,
       fromCurrencyCode: me.findCurrencyDimensionId(currencyRates[i].fromcurrencycode, currenciesRanges),
       toCurrencyCode: me.findCurrencyDimensionId(currencyRates[i].tocurrencycode, currenciesRanges),
@@ -236,12 +238,12 @@ helpers.transformSalesOrders = function(salesOrders, DatesDimension) {
   var me = this,
       newOrders = [],
       counter = 0;
-  console.log(DatesDimension);
+
   for (var i = 0; i < salesOrders.length; i++) {
     var order = {
       SalesOrderId: salesOrders[i].salesorderid,
       revisionNumber: salesOrders[i].revisionnumber,
-      dateDimensionId: me.findDateDimensionId(salesOrders[i].orderdate, DatesDimension),
+      dateDimensionId: me.findDateDimensionId(salesOrders[i].orderdate, DatesDimension, true),
       orderDate: salesOrders[i].orderdate,
       dueDate: salesOrders[i].duedate,
       shipDate: salesOrders[i].shipdate,
@@ -268,16 +270,16 @@ helpers.transformSalesOrders = function(salesOrders, DatesDimension) {
   return newOrders;
 }
 
-helpers.findDateDimensionId = function(currencyRateDate, datesRanges) {
+helpers.findDateDimensionId = function(currencyRateDate, datesRanges, outState) {
   var rateDate = new Date(currencyRateDate);
   for (var i = 0; i < datesRanges.length; i++) {
     var minDate = new Date(datesRanges[i].dataValues.dateMin),
       maxDate = new Date(datesRanges[i].dataValues.dateMax);
     if (rateDate >= minDate && rateDate <= maxDate) {
-      /*if(counter < 10){
+      if(counter < 10 && outState){
         console.log('range '+datesRanges[i].dataValues.dateDimensionId);
         counter++;
-      }*/
+      }
       
       return datesRanges[i].dataValues.dateDimensionId;
     }
