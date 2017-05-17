@@ -20,6 +20,7 @@ exports.sync = function(req, res, next) {
       customerDependencies = [],
       salesOrdersDependencies = [],
       salesOrderDetailsDependencies = [],
+      dependenciesPosition = [];
       output = "";
 
   //get dates data
@@ -36,7 +37,9 @@ exports.sync = function(req, res, next) {
     //console.log(" currencies founded: "+responses[1].length+"");
     currencyRatesDependencies.push(Models.DatesDimension.bulkCreate(helpers.transformDates(responses[0])).then(function(){ return Models.DatesDimension.findAll();}));
     //push DateDimension dependency on sales Orders Dependencies
+    dependenciesPosition.push('CurrencyRates');
     salesOrdersDependencies.push(currencyRatesDependencies[0]);
+    
 
     currencyRatesDependencies.push(Models.CurrenciesDimension.bulkCreate(helpers.transformCurrencies(responses[1])).then(function() { return Models.CurrenciesDimension.findAll();}));    
     
@@ -73,6 +76,7 @@ exports.sync = function(req, res, next) {
       //transfrom & load to DWH Dimension
       return Models.ShipMethodsDimension.bulkCreate(helpers.transformShipMethods(shipMethods));
     }));
+  dependenciesPosition.push('ShipMenthod');
 
   //extract product categories & subcategories data from sourceDb
   Promise.all([sourceDb.query("SELECT psc.ProductSubcategoryId, pc.ProductCategoryID, pc.Name AS category_name,psc.Name AS subcategory_name FROM Production.ProductCategory pc RIGHT JOIN Production.ProductSubcategory psc ON psc.ProductCategoryID = pc.ProductCategoryID", { type: sourceDb.QueryTypes.SELECT })
@@ -85,6 +89,7 @@ exports.sync = function(req, res, next) {
       //console.log("Categories & subcategories transform and loaded");
 
       //extract products data from sourceDb
+      dependenciesPosition.push('Products');
       salesOrdersDependencies.push(sourceDb.query("SELECT pr.ProductID, pr.Name, pr.MakeFlag, pr.FinishedGoodsFlag,pr.Color,pr.StandardCost,pr.ListPrice,COALESCE(pr.ProductSubcategoryID,-1) AS ProductSubcategoryID FROM Production.Product pr ", { type: sourceDb.QueryTypes.SELECT })
         .then(function(products) {
           //console.log("Products founded: "+products.length+"");
@@ -98,11 +103,13 @@ exports.sync = function(req, res, next) {
     .then(function(specialOffers) {
       //transfrom & load to DWH Dimension
       //console.log("Special offers founded: "+specialOffers.length+"");
+      dependenciesPosition.push('SpecialOffer');
       salesOrdersDependencies.push(Models.SpecialOffersDimension.bulkCreate(helpers.transformSpecialOffers(specialOffers)));
     });    
     
   //extract customers data from sourceDb
   //we took all records that StoreID is NULL
+  dependenciesPosition.push('Customer');
   salesOrdersDependencies.push(sourceDb.query("SELECT cus.CustomerID, per.Title, per.FirstName, per.MiddleName, per.LastName FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL", { type: sourceDb.QueryTypes.SELECT })
     .then(function(customers) {
       //console.log("Customers founded: "+customers.length+"");
@@ -111,6 +118,7 @@ exports.sync = function(req, res, next) {
     }));  
 
   //extract sales territories data from sourceDb
+  dependenciesPosition.push('salesTerritories');
   salesOrdersDependencies.push(sourceDb.query("SELECT * FROM Sales.SalesTerritory", { type: sourceDb.QueryTypes.SELECT })
     .then(function(salesTerritories) {
       //transfrom & load to DWH Dimension
@@ -119,6 +127,7 @@ exports.sync = function(req, res, next) {
     }));
 
   //extract sales persons data from sourceDb
+  dependenciesPosition.push('SalesPersons');
   salesOrdersDependencies.push(sourceDb.query("SELECT sp.BusinessEntityID, per.Title, per.FirstName, per.MiddleName, per.LastName, sp.SalesQuota, sp.Bonus, sp.CommissionPct, sp.SalesYTD, sp.SalesLastYear FROM Sales.SalesPerson sp INNER JOIN Person.Person per ON per.BusinessEntityID = sp.BusinessEntityID", { type: sourceDb.QueryTypes.SELECT })
     .then(function(salesPersons) {
       //console.log("sales persons founded: "+salesPersons.length+"");
@@ -130,20 +139,19 @@ exports.sync = function(req, res, next) {
 
   //extract sales orders & sales orders details per users
   Promise.all(salesOrdersDependencies).then(function(responses){
+    var DateDimensionPosition = 0;
     //console.log("Sync all dimensions to load Sales orders");
     
     //como no conozco exactamente en qué posicion está la respuesta de las fechas, paso a buscarla
     //
-    for(var i = 0; i < responses.length; i++){
-      console.log('-------------------------------------------------------');
-      console.log(responses[i]);
-    }  
+    console.log(dependenciesPosition); 
     //extract Sales Orders from sourceDb
     sourceDb.query("SELECT so.SalesOrderID, so.RevisionNumber, so.OrderDate, so.dueDate, so.ShipDate, so.Status, so.OnlineOrderFlag, so.PurchaseOrderNumber, so.AccountNumber, so.CustomerID, so.SalesPersonID, so.TerritoryID, so.ShipMethodID, so.TaxAmt, so.Freight, so.TotalDue, so.Comment FROM Sales.SalesOrderHeader so WHERE so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL)", { type: sourceDb.QueryTypes.SELECT })
       .then(function(salesOrders) {
         //console.log("sales orders founded: "+salesOrders.length+"");
         //transfrom & load to DWH Dimension
-        Promise.all([Models.SalesOrdersFact.bulkCreate(helpers.transformSalesOrders(salesOrders, responses[0])).then(function(){ return Models.SalesOrdersFact.findAll(); })]).then(function(response){
+        //
+        Promise.all([Models.SalesOrdersFact.bulkCreate(helpers.transformSalesOrders(salesOrders, responses[DateDimensionPosition])).then(function(){ return Models.SalesOrdersFact.findAll(); })]).then(function(response){
           //console.log("sales order added");
           //now, we can add orders details
           sourceDb.query("SELECT sod.* FROM Sales.SalesOrderDetail sod INNER JOIN Sales.SalesOrderHeader so ON so.SalesOrderID = sod.SalesOrderID WHERE sod.ProductID IS NOT NULL AND so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL) ", { type: sourceDb.QueryTypes.SELECT })
