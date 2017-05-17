@@ -16,6 +16,8 @@ import { AuthService } from '../auth/auth.service';
 
 export class DashboardComponent implements OnInit {
 
+    private result:any;
+
     constructor(private authService: AuthService) { }
 
     ngOnInit(): void {
@@ -29,6 +31,7 @@ export class DashboardComponent implements OnInit {
     		.then(data => {
     			console.log('data loaded...');
     			console.log(data);
+          me.result = data;
     	});
     	console.log(query);
     }  

@@ -30,6 +30,9 @@
       				<textarea mdInput #query placeholder="Consulta a ejecutar">SELECT COUNT(1) FROM sales_orders_facts</textarea>
     			</md-input-container>
   			</p>
+  			<p *ngIf="result">
+  				{{result}}
+  			</p>
 		  </md-card-content>
 		  <md-card-actions>
 		    <button md-raised-button (click)="executeQuery(query.value)">Ejecutar</button>
