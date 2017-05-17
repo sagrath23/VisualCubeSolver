@@ -4,6 +4,8 @@ var Sequelize = require('sequelize');
 
 var helpers = {};
 
+var counter = 0;
+
 helpers.transformSalesReasons = function(reasons) {
   var newReasons = [];
   for (var i = 0; i < reasons.length; i++) {
@@ -270,9 +272,15 @@ helpers.findDateDimensionId = function(currencyRateDate, datesRanges) {
     var minDate = new Date(datesRanges[i].dataValues.dateMin),
       maxDate = new Date(datesRanges[i].dataValues.dateMax);
     if (rateDate >= minDate && rateDate <= maxDate) {
+      if(counter < 10){
+        console.log('range '+datesRanges[i].dataValues.dateDimensionId);
+        counter++;
+      }
+      
       return datesRanges[i].dataValues.dateDimensionId;
     }
   }
+
   return -1;
 };
 

@@ -29,8 +29,6 @@ export class DashboardComponent implements OnInit {
 
     	me.authService.executeQuery(query)
     		.then(data => {
-    			console.log('data loaded...');
-    			console.log(data);
           me.result = data;
     	});
     	console.log(query);

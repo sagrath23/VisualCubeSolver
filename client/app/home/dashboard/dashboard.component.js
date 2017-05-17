@@ -21,8 +21,6 @@ var DashboardComponent = (function () {
         var me = this;
         me.authService.executeQuery(query)
             .then(function (data) {
-            console.log('data loaded...');
-            console.log(data);
             me.result = data;
         });
         console.log(query);
