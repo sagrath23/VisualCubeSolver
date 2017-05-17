@@ -124,7 +124,9 @@ exports.sync = function(req, res, next) {
       console.log("sales persons founded: "+salesPersons.length+"");
       //transfrom & load to DWH Dimension
       return Models.SalesPersonsDimension.bulkCreate(helpers.transformSalePersons(salesPersons));
-    }));  
+    }));
+
+  //extract stores data from sourceDb    
 
   //extract sales orders & sales orders details per users
   Promise.all(salesOrdersDependencies).then(function(responses){
@@ -145,7 +147,27 @@ exports.sync = function(req, res, next) {
                 });
             });
         });
-      });  
+      });
+
+
+    //extract SalesOrders to Stores from sourceDb
+    /*sourceDb.query("SELECT so.SalesOrderID, so.RevisionNumber, so.OrderDate, so.dueDate, so.ShipDate, so.Status, so.OnlineOrderFlag, so.PurchaseOrderNumber, so.AccountNumber, so.CustomerID, so.SalesPersonID, so.TerritoryID, so.ShipMethodID, so.TaxAmt, so.Freight, so.TotalDue, so.Comment FROM Sales.SalesOrderHeader so WHERE so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.StoreID IS NOT NULL)", { type: sourceDb.QueryTypes.SELECT })
+      .then(function(salesOrders) {
+        console.log("sales orders to store founded: "+salesOrders.length+"");
+        //transfrom & load to DWH Dimension
+        Promise.all([Models.SalesOrdersToStoreFact.bulkCreate(helpers.transformSalesOrders(salesOrders, responses[0])).then(function(){ return Models.SalesOrdersFact.findAll(); })]).then(function(response){
+          console.log("sales order added");
+          //now, we can add orders details
+          sourceDb.query("SELECT sod.* FROM Sales.SalesOrderDetail sod INNER JOIN Sales.SalesOrderHeader so ON so.SalesOrderID = sod.SalesOrderID WHERE sod.ProductID IS NOT NULL AND so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL) ", { type: sourceDb.QueryTypes.SELECT })
+            .then(function(details){
+              console.log("details founded: "+details.length+"");
+              Models.SalesOrderDetailsFact.bulkCreate(helpers.transformSaleOrderDetails(details)).then(function(){
+                  console.log('details loaded');
+                });
+            });
+        });
+      });*/
+        
   });
 
   //send response to view while we do all the stuff in background
