@@ -12,28 +12,44 @@ exports.getSalesPerClientType = function(req, res, next) {
       salesReportDependencies = [];
 
   salesReportDependencies.push(db.query(`SELECT 
-                                            (SELECT COUNT(sf."SalesOrderId") FROM sales_orders_facts sf) AS "ventas_personas" , 
-                                            (SELECT COUNT(stsf."SalesOrderId") FROM sales_orders_to_store_facts stsf ) AS ventas_tiendas`, { type: db.QueryTypes.SELECT }));
+                                            (SELECT COUNT(sf."SalesOrderId") FROM sales_orders_facts sf) AS "ventas personas" , 
+                                            (SELECT COUNT(stsf."SalesOrderId") FROM sales_orders_to_store_facts stsf ) AS "ventas tiendas"`, { type: db.QueryTypes.SELECT }));
 
   Promise.all(salesReportDependencies).then(function(result){
-    console.log("............................................");
-    console.log(result);
     //retrieve data to front
     console.log(result);
+
+    result = result[0][0];
     var data = {
-      labels: ['Download Sales', 'In-Store Sales', 'Mail Sales'],
-      data: [250, 600, 300]
+      labels: [],
+      data: []
     };
+
+    for(var key in result){
+      data.labels.push(key);
+      data.data.push(result[key]);
+    }
+    
     //send response to view while we do all the stuff in background
     res.send(data);
   });      
 };
 
 exports.getSalesCountPerMonth = function(req, res, next) {
-  console.log("!!!getting data...");
 
   var me = this,
       salesReportDependencies = [];
+
+  db.query(`SELECT 
+              COUNT(sof."SalesOrderId") AS client_sales, 
+              sof."dateDimensionId" AS date_dimension
+            FROM 
+              sales_orders_facts sof
+            GROUP BY sof."dateDimensionId"`, { type: db.QueryTypes.SELECT }).then(
+            function(result){
+              console.log(result);
+              res.send(result);
+            });    
   /*
   Models.SalesOrdersFact.findAll({
       attributes: ['dateDimensionId',db.fn('count', db.col('SalesOrderId'))], 
@@ -44,17 +60,11 @@ exports.getSalesCountPerMonth = function(req, res, next) {
       });
       
   
-  db.query(`SELECT 
-              COUNT(sof."SalesOrderId") AS client_sales, 
-              sof."dateDimensionId" AS date_dimension
-            FROM 
-              sales_orders_facts sof
-            GROUP BY sof."dateDimensionId"`, { type: db.QueryTypes.SELECT })*/
-  db.query(`SELECT DISTINCT sof."dateDimensionId" AS date_dimension FROM sales_orders_facts sof`, { type: db.QueryTypes.SELECT })
-  .then(function(result){
-    console.log("-----------------------------------------gotcha count!!!");
+  */
+  //db.query(`SELECT DISTINCT sof."dateDimensionId" AS date_dimension FROM sales_orders_facts sof`, { type: db.QueryTypes.SELECT })
+  /*.then(function(result){
     console.log(result);
     res.send(result);
-  });
+  });*/
   
 };
