@@ -156,7 +156,7 @@ exports.sync = function(req, res, next) {
         //console.log("sales orders founded: "+salesOrders.length+"");
         //transfrom & load to DWH Dimension
         //
-        console.log('Ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+        console.log('Ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh: '+DateDimensionPosition);
         console.log(responses[DateDimensionPosition]);
         Promise.all([Models.SalesOrdersFact.bulkCreate(helpers.transformSalesOrders(salesOrders, responses[DateDimensionPosition])).then(function(){ return Models.SalesOrdersFact.findAll(); })]).then(function(response){
           //console.log("sales order added");
