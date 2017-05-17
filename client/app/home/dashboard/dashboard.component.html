@@ -18,20 +18,22 @@
 	    <md-card class="example-card">
 		  <md-card-header>
 		    <div md-card-avatar class="example-header-image"></div>
-		    <md-card-title>Shiba Inu</md-card-title>
-		    <md-card-subtitle>Dog Breed</md-card-subtitle>
+		    <md-card-title>Ejecutor de SQL</md-card-title>
 		  </md-card-header>
 		  
 		  <md-card-content>
 		    <p>
-		      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-		      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-		      bred for hunting.
+		      Escriba la sentencia que desee ejecutar sobre el data warehouse. El resultado se desplegará en la parte inferior.
 		    </p>
+		    <p>
+    			<md-input-container class="example-full-width">
+      				<textarea mdInput placeholder="Consulta a ejecutar">SELECT * FROM sales_orders_facts</textarea>
+    			</md-input-container>
+  			</p>
 		  </md-card-content>
 		  <md-card-actions>
-		    <button md-button>LIKE</button>
-		    <button md-button>SHARE</button>
+		    <button md-button>Ejecutar</button>
+		    <button md-button>Limpiar</button>
 		  </md-card-actions>
 		</md-card>
 	  </md-grid-tile>
