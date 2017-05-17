@@ -4,8 +4,6 @@ var Sequelize = require('sequelize');
 
 var helpers = {};
 
-var counter = 0;
-
 helpers.transformSalesReasons = function(reasons) {
   var newReasons = [];
   for (var i = 0; i < reasons.length; i++) {
@@ -236,14 +234,14 @@ helpers.transformSalePersons = function(salesPersons) {
 
 helpers.transformSalesOrders = function(salesOrders, DatesDimension) {
   var me = this,
-    newOrders = [];
+      newOrders = [],
+      counter = 0;
   console.log(DatesDimension);
   for (var i = 0; i < salesOrders.length; i++) {
     var order = {
       SalesOrderId: salesOrders[i].salesorderid,
       revisionNumber: salesOrders[i].revisionnumber,
-      dateDimensionId: me.findDateDimensionId(salesOrders[i].orderdate,
-        DatesDimension),
+      dateDimensionId: me.findDateDimensionId(salesOrders[i].orderdate, DatesDimension),
       orderDate: salesOrders[i].orderdate,
       dueDate: salesOrders[i].duedate,
       shipDate: salesOrders[i].shipdate,
@@ -260,6 +258,10 @@ helpers.transformSalesOrders = function(salesOrders, DatesDimension) {
       totalDue: salesOrders[i].totaldue,
       comment: salesOrders[i].comment
     }
+    if(counter<10){
+      console.log(order);
+      counter++;
+    }
     newOrders.push(order);
   }
 
@@ -272,10 +274,10 @@ helpers.findDateDimensionId = function(currencyRateDate, datesRanges) {
     var minDate = new Date(datesRanges[i].dataValues.dateMin),
       maxDate = new Date(datesRanges[i].dataValues.dateMax);
     if (rateDate >= minDate && rateDate <= maxDate) {
-      if(counter < 10){
+      /*if(counter < 10){
         console.log('range '+datesRanges[i].dataValues.dateDimensionId);
         counter++;
-      }
+      }*/
       
       return datesRanges[i].dataValues.dateDimensionId;
     }
