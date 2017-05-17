@@ -3,19 +3,34 @@ import { Component, OnInit } from '@angular/core';
 import { SalesComponent } from '../sales/sales.component';
 import { ReportComponent } from '../report/report.component';
 
+import { AuthService } from '../auth/auth.service';
+
 
 @Component({
   moduleId: module.id,
   selector: 'my-dashboard',
-  templateUrl: 'dashboard.component.html'
+  templateUrl: 'dashboard.component.html',
+  styleUrls: ['dashboard.component.css'],
+  providers: [AuthService]
 })
 
 export class DashboardComponent implements OnInit {
 
-    constructor() { }
+    constructor(private authService: AuthService) { }
 
     ngOnInit(): void {
 
+    }
+
+    executeQuery(query:string):any{
+    	var me = this;
+
+    	me.authService.getSalesPerClientType()
+    		.then(data => {
+    			console.log('data loaded...');
+    			console.log(data);
+    	});
+    	console.log(query);
     }  
 
 }

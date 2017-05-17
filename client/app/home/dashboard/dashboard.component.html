@@ -14,7 +14,7 @@
 		<report-component></report-component>
 	  </md-grid-tile>
 
-	  <md-grid-tile [colspan]=1 [rowspan]=4 [style.background]="lightpink">
+	  <md-grid-tile [colspan]=4 [rowspan]=6 [style.background]="lightpink">
 	    <md-card class="example-card">
 		  <md-card-header>
 		    <div md-card-avatar class="example-header-image"></div>
@@ -27,12 +27,12 @@
 		    </p>
 		    <p>
     			<md-input-container class="example-full-width">
-      				<textarea mdInput placeholder="Consulta a ejecutar">SELECT * FROM sales_orders_facts</textarea>
+      				<textarea mdInput #query placeholder="Consulta a ejecutar">SELECT COUNT(1) FROM sales_orders_facts</textarea>
     			</md-input-container>
   			</p>
 		  </md-card-content>
 		  <md-card-actions>
-		    <button md-button>Ejecutar</button>
+		    <button md-raised-button (click)="executeQuery(query.value)">Ejecutar</button>
 		    <button md-button>Limpiar</button>
 		  </md-card-actions>
 		</md-card>

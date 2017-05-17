@@ -172,4 +172,16 @@ exports.sync = function(req, res, next) {
 
   //send response to view while we do all the stuff in background
   res.send("AdventureWorks Data Warehouse Model Synchronization Success!");
+
+exports.executeQuery = function(req, res, next){
+  db.query(req.body.query, { type: db.QueryTypes.SELECT })
+    .then(function(results) {
+      console.log("query results... ");
+      console.log(results);
+      //send to front
+      ////send response to view while we do all the stuff in background
+      res.send(results);
+    });
+}
+
 };

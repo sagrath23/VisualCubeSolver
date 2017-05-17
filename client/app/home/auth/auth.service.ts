@@ -54,6 +54,21 @@ export class AuthService {
                .catch(this.handleError);
   	}
 
+  	executeQuery(query:string):Promise<any>{
+  		var me = this;
+  		const url = `/models/execute_query`;
+
+		return me.http
+    				.post(url, JSON.stringify({query: query}), {headers: this.headers})
+    				.toPromise()
+    				.then((data) => {
+    						console.log(data.json(),'resultado');
+
+    						return data.json();							
+						}).catch(this.handleError);
+
+  	}
+
 	login(username: string,password: string): Promise<User>{
 		const url = `${this.authUrl}/auth`;
 

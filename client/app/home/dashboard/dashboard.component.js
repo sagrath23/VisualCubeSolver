@@ -10,10 +10,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var auth_service_1 = require("../auth/auth.service");
 var DashboardComponent = (function () {
-    function DashboardComponent() {
+    function DashboardComponent(authService) {
+        this.authService = authService;
     }
     DashboardComponent.prototype.ngOnInit = function () {
+    };
+    DashboardComponent.prototype.executeQuery = function (query) {
+        var me = this;
+        me.authService.getSalesPerClientType()
+            .then(function (data) {
+            console.log('data loaded...');
+            console.log(data);
+        });
+        console.log(query);
     };
     return DashboardComponent;
 }());
@@ -21,9 +32,11 @@ DashboardComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
         selector: 'my-dashboard',
-        templateUrl: 'dashboard.component.html'
+        templateUrl: 'dashboard.component.html',
+        styleUrls: ['dashboard.component.css'],
+        providers: [auth_service_1.AuthService]
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], DashboardComponent);
 exports.DashboardComponent = DashboardComponent;
 //# sourceMappingURL=dashboard.component.js.map

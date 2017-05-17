@@ -44,6 +44,17 @@ var AuthService = (function () {
         })
             .catch(this.handleError);
     };
+    AuthService.prototype.executeQuery = function (query) {
+        var me = this;
+        var url = "/models/execute_query";
+        return me.http
+            .post(url, JSON.stringify({ query: query }), { headers: this.headers })
+            .toPromise()
+            .then(function (data) {
+            console.log(data.json(), 'resultado');
+            return data.json();
+        }).catch(this.handleError);
+    };
     AuthService.prototype.login = function (username, password) {
         var _this = this;
         var url = this.authUrl + "/auth";
