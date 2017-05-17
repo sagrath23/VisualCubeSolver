@@ -241,7 +241,7 @@ helpers.transformSalePersons = function(salesPersons) {
 helpers.transformSalesOrders = function(salesOrders, DatesDimension) {
   var me = this,
       newOrders = [],
-      counter = 0;
+      counterOrders = 0;
 
   for (var i = 0; i < salesOrders.length; i++) {
     var order = {
@@ -264,9 +264,9 @@ helpers.transformSalesOrders = function(salesOrders, DatesDimension) {
       totalDue: salesOrders[i].totaldue,
       comment: salesOrders[i].comment
     }
-    if(counter<10){
+    if(counterOrders<10){
       console.log(order);
-      counter++;
+      counterOrders++;
     }
     newOrders.push(order);
   }
@@ -275,29 +275,22 @@ helpers.transformSalesOrders = function(salesOrders, DatesDimension) {
 }
 
 helpers.findDateDimensionId = function(currencyRateDate, datesRanges, outState) {
-  var rateDate = new Date(currencyRateDate);
+  var rateDate = new Date(currencyRateDate),
+      dateRangeId = -1;
   for (var i = 0; i < datesRanges.length; i++) {
     var minDate = new Date(datesRanges[i].dataValues.dateMin),
       maxDate = new Date(datesRanges[i].dataValues.dateMax);
-    if(outState){
-        
-        console.log('date ',rateDate);
-        
-        counter++;
-      }  
-    if (rateDate >= minDate && rateDate <= maxDate) {
-      if(outState){
-        
-        console.log('range '+datesRanges[i].dataValues.dateDimensionId);
-        
-        counter++;
-      }
       
-      return datesRanges[i].dataValues.dateDimensionId;
+    if (rateDate >= minDate && rateDate <= maxDate) {
+      dateRangeId = datesRanges[i].dataValues.dateDimensionId;
     }
   }
 
-  return -1;
+  if(dateRangeId != -1){
+    console.log('-----------------------Found another!!!');
+  }
+
+  return dateRangeId;
 };
 
 helpers.findCurrencyDimensionId = function(currencyCode, currenciesRanges) {
