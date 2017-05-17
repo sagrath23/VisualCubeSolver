@@ -282,10 +282,6 @@ helpers.transformSalesOrders = function(salesOrders, DatesDimension) {
       totalDue: salesOrders[i].totaldue,
       comment: salesOrders[i].comment
     }
-    if(counterOrders<10){
-      console.log(order);
-      counterOrders++;
-    }
     newOrders.push(order);
   }
 

@@ -157,9 +157,10 @@ exports.sync = function(req, res, next) {
     //extract Sales Orders from sourceDb
     sourceDb.query("SELECT so.SalesOrderID, so.RevisionNumber, so.OrderDate, so.dueDate, so.ShipDate, so.Status, so.OnlineOrderFlag, so.PurchaseOrderNumber, so.AccountNumber, so.CustomerID, so.SalesPersonID, so.TerritoryID, so.ShipMethodID, so.TaxAmt, so.Freight, so.TotalDue, so.Comment FROM Sales.SalesOrderHeader so WHERE so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL)", { type: sourceDb.QueryTypes.SELECT })
       .then(function(salesOrders) {
+        console.log("sales orders founded: "+salesOrders.length+"");
         //transfrom & load to DWH Dimension        
         Promise.all([Models.SalesOrdersFact.bulkCreate(helpers.transformSalesOrders(salesOrders, dates)).then(function(){ return Models.SalesOrdersFact.findAll(); })]).then(function(response){
-          //console.log("sales order added");
+          console.log("sales order added");
           //now, we can add orders details
           sourceDb.query("SELECT sod.* FROM Sales.SalesOrderDetail sod INNER JOIN Sales.SalesOrderHeader so ON so.SalesOrderID = sod.SalesOrderID WHERE sod.ProductID IS NOT NULL AND so.CustomerID IN (SELECT cus.CustomerID FROM Sales.Customer cus INNER JOIN Person.Person per ON per.BusinessEntityID = cus.PersonID WHERE cus.PersonID IS NOT NULL AND cus.StoreID IS NULL) ", { type: sourceDb.QueryTypes.SELECT })
             .then(function(details){
