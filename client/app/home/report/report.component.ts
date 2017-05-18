@@ -38,6 +38,8 @@ export class ReportComponent implements OnInit {
     }
   ];
 
+  public lineChartType:string = 'line';
+
   public isDataAvailable:boolean = false;
   
   constructor(private authService: AuthService) { }

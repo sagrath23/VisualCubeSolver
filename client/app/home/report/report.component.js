@@ -35,6 +35,7 @@ var ReportComponent = (function () {
                 pointHoverBorderColor: 'rgba(77,83,96,1)'
             }
         ];
+        this.lineChartType = 'line';
         this.isDataAvailable = false;
     }
     ReportComponent.prototype.ngOnInit = function () {
