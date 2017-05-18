@@ -69,17 +69,17 @@ exports.getSalesCountPerMonth = function(req, res, next) {
     var data = {},
         usedLabels = {},
         labels = [],
-        clientsData = {data:[],label: 'Ventas por internet'},
-        storesData = {data:[],label: 'Ventas a tiendas'};
+        clientsData = {data:[], label: 'Ventas por internet'},
+        storesData = {data:[], label: 'Ventas a tiendas'};
 
     //sacamos los labels de todas las ventas (asumiendo que se vendió en ambos en todos los meses)
     //internet
     for(var i = 0; i < results[0].length; i++){
-      usedLabels[results[0][i].date_name] = true;
+      usedLabels[results[0][i].date_name] = {internet:true};
     }
     //tiendas
     for(var i = 0; i < results[1].length; i++){
-      usedLabels[results[1][i].date_name] = true;
+      usedLabels[results[1][i].date_name].store = true;
     }
 
     //y los paso al arreglo de labels
@@ -90,12 +90,23 @@ exports.getSalesCountPerMonth = function(req, res, next) {
     //ahora, armo los datasets de cada tipo de venta
     //internet
     for(var i = 0; i < results[0].length; i++){
-      clientsData.data.push(results[0][i].client_sales);
+      if(usedLabels[results[0][i].date_name].internet){
+        clientsData.data.push(results[0][i].client_sales);
+      }
+      else{
+        clientsData.data.push(0);
+      }
+      
     }
 
     //tiendas
     for(var i = 0; i < results[1].length; i++){
-      storesData.data.push(results[1][i].client_sales);
+      if(usedLabels[results[1][i].date_name].store){
+        storesData.data.push(results[1][i].client_sales);
+      }
+      else{
+        storesData.data.push(0);
+      }
     }
 
     //ponemos todo junto
