@@ -13,13 +13,31 @@ export class ReportComponent implements OnInit {
 
   private reportData:any;
 
-  // Pie
-  public pieChartLabels:string[];
-  public pieChartData:number[];
-  public pieChartOptions: any = {
-    responsive:true
+  // lineChart
+  public lineChartData:Array<any>;
+  public lineChartLabels:Array<any>;
+  public lineChartOptions:any = {
+    responsive: true
   };
-  public pieChartType:string = 'line';
+  public lineChartColors:Array<any> = [
+    { // grey
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+    },
+    { // dark grey
+      backgroundColor: 'rgba(77,83,96,0.2)',
+      borderColor: 'rgba(77,83,96,1)',
+      pointBackgroundColor: 'rgba(77,83,96,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(77,83,96,1)'
+    }
+  ];
+
   public isDataAvailable:boolean = false;
   
   constructor(private authService: AuthService) { }
@@ -37,10 +55,9 @@ export class ReportComponent implements OnInit {
       .then(data => {
         console.log(data,"report data");
 
-        me.pieChartLabels = data.labels; 
-        me.pieChartData = data.datasets;
+        me.lineChartLabels = data.labels; 
+        me.lineChartData = data.datasets;
         me.isDataAvailable = true;
-        me.reportData = data;
       });
   	}
 

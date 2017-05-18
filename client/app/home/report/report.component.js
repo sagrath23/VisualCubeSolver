@@ -14,10 +14,27 @@ var auth_service_1 = require("../auth/auth.service");
 var ReportComponent = (function () {
     function ReportComponent(authService) {
         this.authService = authService;
-        this.pieChartOptions = {
+        this.lineChartOptions = {
             responsive: true
         };
-        this.pieChartType = 'line';
+        this.lineChartColors = [
+            {
+                backgroundColor: 'rgba(148,159,177,0.2)',
+                borderColor: 'rgba(148,159,177,1)',
+                pointBackgroundColor: 'rgba(148,159,177,1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+            },
+            {
+                backgroundColor: 'rgba(77,83,96,0.2)',
+                borderColor: 'rgba(77,83,96,1)',
+                pointBackgroundColor: 'rgba(77,83,96,1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(77,83,96,1)'
+            }
+        ];
         this.isDataAvailable = false;
     }
     ReportComponent.prototype.ngOnInit = function () {
@@ -29,10 +46,9 @@ var ReportComponent = (function () {
         me.authService.getSalesPerMonth()
             .then(function (data) {
             console.log(data, "report data");
-            me.pieChartLabels = data.labels;
-            me.pieChartData = data.datasets;
+            me.lineChartLabels = data.labels;
+            me.lineChartData = data.datasets;
             me.isDataAvailable = true;
-            me.reportData = data;
         });
     };
     // events

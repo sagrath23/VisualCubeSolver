@@ -4,12 +4,14 @@
 	    <md-card-title>Reporte de ventas</md-card-title>
 	</md-card-header>
 		<canvas baseChart class="baseChart" 
-          [data]="pieChartData"
-          [labels]="pieChartLabels"
-          [options]="pieChartOptions"
-          [chartType]="pieChartType"
-          (chartHover)="chartHovered($event)"
-          (chartClick)="chartClicked($event)"
+			[datasets]="lineChartData"
+            [labels]="lineChartLabels"
+            [options]="lineChartOptions"
+            [colors]="lineChartColors"
+            [legend]="lineChartLegend"
+            [chartType]="lineChartType"
+            (chartHover)="chartHovered($event)"
+            (chartClick)="chartClicked($event)"
           *ngIf="isDataAvailable"></canvas>
 		<md-card-content>
 			<md-list class="report_list" *ngIf="reportData" dense>
