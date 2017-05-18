@@ -87,26 +87,24 @@ exports.getSalesCountPerMonth = function(req, res, next) {
       labels.push(i);
     }
 
-    console.log(usedLabels);
+    var clientDelta = 0,storeDelta = 0;
 
-    //ahora, armo los datasets de cada tipo de venta
-    //internet
-    for(var i = 0; i < results[0].length; i++){
-      if(usedLabels[results[0][i].date_name].internet){
-        clientsData.data.push(results[0][i].client_sales);
+    for(var i = 0; i < labels.length; i++){
+      if(usedLabels[labels[i]].internet){
+        //esta
+        clientsData.data.push(results[0][i-clientDelta].client_sales); 
       }
       else{
+        //no está
+        clientDelta++;
         clientsData.data.push(0);
       }
-      
-    }
 
-    //tiendas
-    for(var i = 0; i < results[1].length; i++){
-      if(usedLabels[results[1][i].date_name].store){
-        storesData.data.push(results[1][i].client_sales);
+      if(usedLabels[labels[i]].store){
+        storesData.data.push(results[1][i-storeDelta].client_sales);
       }
       else{
+        storeDelta ++;
         storesData.data.push(0);
       }
     }
@@ -115,7 +113,7 @@ exports.getSalesCountPerMonth = function(req, res, next) {
     data.labels = labels;
     data.datasets = [clientsData,storesData];
         
-    console.log(data);
+    //console.log(data.datasets[1]);
     //y enviamos
     res.send(data);
   });
