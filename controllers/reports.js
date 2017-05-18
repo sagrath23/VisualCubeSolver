@@ -79,13 +79,15 @@ exports.getSalesCountPerMonth = function(req, res, next) {
     }
     //tiendas
     for(var i = 0; i < results[1].length; i++){
-      usedLabels[results[1][i].date_name].store = true;
+      usedLabels[results[1][i].date_name]['store'] = true;
     }
 
     //y los paso al arreglo de labels
     for(var i in usedLabels){
       labels.push(i);
     }
+
+    console.log(usedLabels);
 
     //ahora, armo los datasets de cada tipo de venta
     //internet
