@@ -101,7 +101,7 @@ exports.getSalesCountPerMonth = function(req, res, next) {
       }
 
       if(usedLabels[labels[i]].store){
-        storesData.data.push(results[1][i-storeDelta].client_sales);
+        storesData.data.push(results[1][i-storeDelta].store_sales);
       }
       else{
         storeDelta ++;
