@@ -9,11 +9,6 @@
 		<sales-report></sales-report>
 	  </md-grid-tile>
 
-	  <md-grid-tile [colspan]=2 [rowspan]=6 [style.background]="lightgreen">
-	    <!-- Sales report-->
-		<report-component></report-component>
-	  </md-grid-tile>
-
 	  <md-grid-tile [colspan]=4 [rowspan]=6 [style.background]="lightpink">
 	    <md-card class="example-card">
 		  <md-card-header>
@@ -61,7 +56,11 @@
 		  </md-card-actions>
 		</md-card>
 	  </md-grid-tile>
+	  <md-grid-tile [colspan]=2 [rowspan]=6 [style.background]="lightgreen">
+	    
+	  </md-grid-tile>
 	</md-grid-list>
-	<h2>Aquí va el dashboard</h2>
+	<!-- Sales report-->
+	<report-component></report-component>
 </div>
 	

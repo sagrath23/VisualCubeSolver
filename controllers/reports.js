@@ -18,8 +18,9 @@ exports.getSalesPerClientType = function(req, res, next) {
   Promise.all(salesReportDependencies).then(function(result){
     //retrieve data to front
     console.log(result);
-
+    //extract data from resultant array
     result = result[0][0];
+
     var data = {
       labels: [],
       data: []
@@ -42,10 +43,13 @@ exports.getSalesCountPerMonth = function(req, res, next) {
 
   db.query(`SELECT 
               COUNT(sof."SalesOrderId") AS client_sales, 
-              sof."dateDimensionId" AS date_dimension
+              sof."dateDimensionId" AS date_dimension,
+              dd."dateName" AS date_name
             FROM 
               sales_orders_facts sof
-            GROUP BY sof."dateDimensionId"`, { type: db.QueryTypes.SELECT }).then(
+              INNER JOIN dates_dimensions dd ON dd."dateDimensionId" = sof."dateDimensionId"
+            GROUP BY dd."dateName", sof."dateDimensionId"
+            ORDER BY sof."dateDimensionId" ASC`, { type: db.QueryTypes.SELECT }).then(
             function(result){
               console.log(result);
               res.send(result);

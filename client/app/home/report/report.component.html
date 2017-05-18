@@ -3,7 +3,32 @@
 		<div md-card-avatar class="example-header-image"></div>
 	    <md-card-title>Reporte de ventas</md-card-title>
 	</md-card-header>
+		<canvas baseChart class="baseChart" 
+          [data]="pieChartData"
+          [labels]="pieChartLabels"
+          [options]="pieChartOptions"
+          [chartType]="pieChartType"
+          (chartHover)="chartHovered($event)"
+          (chartClick)="chartClicked($event)"
+          *ngIf="isDataAvailable"></canvas>
 		<md-card-content>
+			<md-list class="report_list" *ngIf="reportData" dense>
+			  <h3 md-subheader>Ventas a tiendas</h3>
+			  <md-list-item *ngFor="let data of reportData">
+			    <md-icon md-list-icon>functions</md-icon>
+			    <h4 md-line>{{data.date_name}}</h4>
+			    <p md-line> {{data.client_sales}} </p>
+			  </md-list-item>
+			  <!--<md-divider></md-divider>
+			  <h3 md-subheader>Ventas a clientes</h3>
+			  <md-list-item *ngFor="let note of notes">
+			    <md-icon md-list-icon>note</md-icon>
+			    <h4 md-line>{{note.name}}</h4>
+			    <p md-line> {{note.updated | date}} </p>
+			  </md-list-item> -->
+			</md-list>
+
+
 			<p>
 	      	Este reporte muestra como se han concentrado las ventas de la compañía entre los sectores de clientes identificados.
 	    	</p>

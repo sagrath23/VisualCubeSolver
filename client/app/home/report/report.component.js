@@ -14,6 +14,11 @@ var auth_service_1 = require("../auth/auth.service");
 var ReportComponent = (function () {
     function ReportComponent(authService) {
         this.authService = authService;
+        this.pieChartOptions = {
+            responsive: true
+        };
+        this.pieChartType = 'line';
+        this.isDataAvailable = false;
     }
     ReportComponent.prototype.ngOnInit = function () {
         var me = this;
@@ -23,9 +28,19 @@ var ReportComponent = (function () {
         var me = this;
         me.authService.getSalesPerMonth()
             .then(function (data) {
-            console.log(data);
-            console.log('data loaded...');
+            console.log(data, "report data");
+            me.pieChartLabels = data.labels;
+            me.pieChartData = data.datasets;
+            me.isDataAvailable = true;
+            me.reportData = data;
         });
+    };
+    // events
+    ReportComponent.prototype.chartClicked = function (e) {
+        console.log(e);
+    };
+    ReportComponent.prototype.chartHovered = function (e) {
+        console.log(e);
     };
     return ReportComponent;
 }());

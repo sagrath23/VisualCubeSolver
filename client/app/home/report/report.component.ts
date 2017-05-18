@@ -11,6 +11,16 @@ import { AuthService } from '../auth/auth.service';
 
 export class ReportComponent implements OnInit {
 
+  private reportData:any;
+
+  // Pie
+  public pieChartLabels:string[];
+  public pieChartData:number[];
+  public pieChartOptions: any = {
+    responsive:true
+  };
+  public pieChartType:string = 'line';
+  public isDataAvailable:boolean = false;
   
   constructor(private authService: AuthService) { }
 
@@ -25,8 +35,22 @@ export class ReportComponent implements OnInit {
   		
   	me.authService.getSalesPerMonth()
       .then(data => {
-        console.log(data);
-    	  console.log('data loaded...');
+        console.log(data,"report data");
+
+        me.pieChartLabels = data.labels; 
+        me.pieChartData = data.datasets;
+        me.isDataAvailable = true;
+        me.reportData = data;
       });
-  	}	 
+  	}
+
+  // events
+  public chartClicked(e:any):void {
+    console.log(e);
+  }
+
+  public chartHovered(e:any):void {
+    console.log(e);
+  }
+  	 
 }

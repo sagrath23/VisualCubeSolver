@@ -13,7 +13,7 @@ var routes = require('./routes/routes');
 var helperFunctions = require('./helpers/helperFunctions');
 
 // Uncomment the following lines to start logging requests to consoles.
-app.use(morgan('combined'));
+//app.use(morgan('combined'));
 // parse application/x-www-form-urlencoded.
 app.use(bodyParser.urlencoded({
   extended: false
