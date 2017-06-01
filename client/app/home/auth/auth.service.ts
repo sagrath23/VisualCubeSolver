@@ -31,7 +31,7 @@ export class AuthService {
 	
 	getSalesPerMonth(): Promise<Data> {
 		var me = this,
-			serviceUrl = "/sales/getsalespermonth";
+			serviceUrl = "/products/getsalespermonth";
     	return me.http.get(serviceUrl)
                .toPromise()
                .then((response) =>{
@@ -39,7 +39,19 @@ export class AuthService {
                		return response.json() as Data;
                	})
                .catch(this.handleError);
-  	}	
+  	}
+
+	getProductSalesPerMonth(): Promise<Data> {
+		var me = this,
+			serviceUrl = "/sales/getproductsales";
+    	return me.http.get(serviceUrl)
+               .toPromise()
+               .then((response) =>{
+               		console.log(response);
+               		return response.json() as Data;
+               	})
+               .catch(this.handleError);
+  	}  	
 
 	getSalesPerClientType(): Promise<Data> {
 		var me = this,

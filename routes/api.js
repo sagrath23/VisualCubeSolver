@@ -10,6 +10,7 @@ var routesAPI = function(app) {
   app.post('/models/execute_query', models.executeQuery);
   app.get('/sales/getsales', reports.getSalesPerClientType);
   app.get('/sales/getsalespermonth', reports.getSalesCountPerMonth);
+  app.get('/products/getsalespermonth', reports.getProductsSales);
   
 }
 

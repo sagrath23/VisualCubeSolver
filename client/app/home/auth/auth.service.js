@@ -24,7 +24,17 @@ var AuthService = (function () {
         return Promise.reject(error.message || error);
     };
     AuthService.prototype.getSalesPerMonth = function () {
-        var me = this, serviceUrl = "/sales/getsalespermonth";
+        var me = this, serviceUrl = "/products/getsalespermonth";
+        return me.http.get(serviceUrl)
+            .toPromise()
+            .then(function (response) {
+            console.log(response);
+            return response.json();
+        })
+            .catch(this.handleError);
+    };
+    AuthService.prototype.getProductSalesPerMonth = function () {
+        var me = this, serviceUrl = "/sales/getproductsales";
         return me.http.get(serviceUrl)
             .toPromise()
             .then(function (response) {
